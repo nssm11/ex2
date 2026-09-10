@@ -58,7 +58,7 @@ export default async function HomePage() {
               <Link href="/boutique" className="btn-primary">
                 Découvrir la boutique <ArrowRightIcon size={14} />
               </Link>
-              <Link href="/boutique?sort=bestsellers" className="btn-secondary rounded-full">
+              <Link href="/routine" className="btn-secondary rounded-full">
                 Routine sur-mesure
               </Link>
             </div>
@@ -233,7 +233,7 @@ export default async function HomePage() {
                 nettoyant, soin, protection — adaptée à votre peau, pas au marketing.
               </p>
               <div className="mt-7 flex flex-wrap gap-3">
-                <Link href="/boutique" className="btn-primary">
+                <Link href="/routine" className="btn-primary">
                   <SparkIcon size={14} /> Créer ma routine
                 </Link>
                 <Link href="/aide" className="btn-ghost">
