@@ -18,7 +18,7 @@ export default async function MarquesPage() {
       <PageIntro
         index={`${list.length} maisons`}
         kicker="Nos marques"
-        title={<>Des maisons qui <em className="text-champagne-2">engagent</em> leur nom</>}
+        title={<>Des maisons qui <em className="text-vert">engagent</em> leur nom</>}
         intro="Laboratoires dermatologiques européens et maisons de soin, distribués officiellement en Tunisie. Nous travaillons exclusivement avec des acteurs dont nous pouvons défendre les formules."
       />
 
@@ -30,12 +30,12 @@ export default async function MarquesPage() {
             {featured.map((b, i) => (
               <Link key={b.id} href={`/marque/${b.slug}`} className="group flex min-h-56 flex-col justify-between bg-cream p-7 transition-colors duration-500 hover:bg-paper lg:min-h-64 lg:p-9">
                 <div className="flex items-baseline justify-between">
-                  <span className="font-display text-2xl leading-tight text-ink transition-colors duration-500 group-hover:text-champagne-2 lg:text-[1.7rem]">{b.name}</span>
+                  <span className="font-display text-2xl leading-tight text-ink transition-colors duration-500 group-hover:text-vert lg:text-[1.7rem]">{b.name}</span>
                   <span className="font-display text-xs italic text-muted-2">{String(i + 1).padStart(2, "0")}</span>
                 </div>
                 <div>
                   <p className="mb-4 line-clamp-3 max-w-sm text-xs leading-relaxed text-muted">{b.story}</p>
-                  <p className="flex items-center gap-2 text-[10px] font-bold tracking-[0.02em] text-muted-2"><span className="text-champagne-2">{b.country}</span><span className="h-px w-6 bg-stone-2" /> Découvrir <ArrowRightIcon size={11} className="transition-transform duration-500 group-hover:translate-x-1" /></p>
+                  <p className="flex items-center gap-2 text-micro font-semibold tracking-[0.08em] text-muted-2"><span className="text-vert">{b.country}</span><span className="h-px w-6 bg-stone-2" /> Découvrir <ArrowRightIcon size={11} className="transition-transform duration-500 group-hover:translate-x-1" /></p>
                 </div>
               </Link>
             ))}
@@ -49,13 +49,13 @@ export default async function MarquesPage() {
         <div className="grid gap-x-12 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {Object.entries(groups).sort().map(([l, bs]) => (
             <div key={l}>
-              <p className="border-b border-stone pb-3 font-display text-3xl italic text-champagne-2">{l}</p>
+              <p className="border-b border-stone pb-3 font-display text-3xl italic text-vert">{l}</p>
               <ul className="mt-2">
                 {bs.map((b) => (
                   <li key={b.id}>
                     <Link href={`/marque/${b.slug}`} className="group flex items-baseline justify-between gap-3 border-b border-stone/50 py-3">
                       <span className="text-[15px] text-charcoal transition-colors group-hover:text-ink">{b.name}</span>
-                      <span className="shrink-0 text-[10px] tracking-[0.02em] text-muted-2">{b.country}</span>
+                      <span className="shrink-0 text-micro tracking-[0.08em] text-muted-2">{b.country}</span>
                     </Link>
                   </li>
                 ))}

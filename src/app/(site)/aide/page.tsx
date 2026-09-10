@@ -17,21 +17,21 @@ export default function AidePage() {
   return (
     <div className="border-b border-stone">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <section className="bg-noir text-paper">
+      <section className="bg-vert text-cream">
         <div className="container-lux py-12 lg:py-16">
-          <p className="eyebrow mb-6 flex items-center gap-3 text-paper/55"><span className="font-display text-lg italic text-champagne-3">Aide</span> Nous sommes là</p>
-          <h1 className="font-display text-display-lg">Une question ? <em className="text-champagne-3">Une vraie personne.</em></h1>
+          <p className="eyebrow mb-6 flex items-center gap-3 text-cream/55"><span className="font-display text-lg italic text-sage-3">Aide</span> Nous sommes là</p>
+          <h1 className="font-display text-display-lg">Une question ? <em className="text-sage-3">Une vraie personne.</em></h1>
           <div className="mt-9 grid gap-px border border-paper/15 bg-paper/15 sm:grid-cols-3">
-            <a href="tel:+21671450210" className="flex items-center gap-4 bg-noir-2 px-6 py-5 text-sm transition-colors hover:bg-paper hover:text-noir"><PhoneIcon size={18} className="text-champagne-3" /><span><span className="block font-medium">71 450 210</span><span className="text-xs opacity-60">Lun–Sam 8h30–20h30</span></span></a>
-            <a href="mailto:contact@cleopatre.tn" className="flex items-center gap-4 bg-noir-2 px-6 py-5 text-sm transition-colors hover:bg-paper hover:text-noir"><MailIcon size={18} className="text-champagne-3" /><span><span className="block font-medium">contact@cleopatre.tn</span><span className="text-xs opacity-60">réponse sous 24 h ouvrées</span></span></a>
-            <Link href="/boutiques" className="flex items-center gap-4 bg-noir-2 px-6 py-5 text-sm transition-colors hover:bg-paper hover:text-noir"><ClockIcon size={18} className="text-champagne-3" /><span><span className="block font-medium">En boutique</span><span className="text-xs opacity-60">Ezzahra · Hammam-Lif</span></span></Link>
+            <a href="tel:+21671450210" className="flex items-center gap-4 bg-vert-2 px-6 py-5 text-sm transition-colors hover:bg-paper hover:text-noir"><PhoneIcon size={18} className="text-sage-3" /><span><span className="block font-medium">71 450 210</span><span className="text-xs opacity-60">Lun–Sam 8h30–20h30</span></span></a>
+            <a href="mailto:contact@cleopatre.tn" className="flex items-center gap-4 bg-vert-2 px-6 py-5 text-sm transition-colors hover:bg-paper hover:text-noir"><MailIcon size={18} className="text-sage-3" /><span><span className="block font-medium">contact@cleopatre.tn</span><span className="text-xs opacity-60">réponse sous 24 h ouvrées</span></span></a>
+            <Link href="/boutiques" className="flex items-center gap-4 bg-vert-2 px-6 py-5 text-sm transition-colors hover:bg-paper hover:text-noir"><ClockIcon size={18} className="text-sage-3" /><span><span className="block font-medium">En boutique</span><span className="text-xs opacity-60">Ezzahra · Hammam-Lif</span></span></Link>
           </div>
         </div>
       </section>
 
       <div className="container-lux grid gap-14 py-14 lg:grid-cols-12 lg:py-20">
         <div className="lg:col-span-7">
-          <p className="eyebrow mb-6 flex items-center gap-3"><span className="font-display text-lg italic text-champagne-2">FAQ</span> Questions fréquentes</p>
+          <p className="eyebrow mb-6 flex items-center gap-3"><span className="font-display text-lg italic text-vert">FAQ</span> Questions fréquentes</p>
           <div className="divide-y divide-stone border-y border-stone">
             {FAQ.map(([q, a]) => (
               <details key={q} className="group py-5">

@@ -3,31 +3,65 @@
 @import "@fontsource-variable/manrope/index.css";
 @import "tailwindcss";
 
+/*
+ * Variante « vrai pointeur » : les commandes révélées au survol (favoris,
+ * ajout rapide) ne doivent jamais disparaître sur une tablette tactile,
+ * qui n'a pas d'état de survol. On les masque donc uniquement là où le
+ * navigateur annonce une souris — et non à partir d'une largeur d'écran.
+ */
+@custom-variant hover-hover (@media (hover: hover) and (pointer: fine));
+
 /* ═══════════════════════════════════════════════════════════════
    CLÉOPÂTRE — design language
    Maison d'excellence · esprit éditorial · précision pharmaceutique
-   warm ivory / ink / champagne + controlled campaign color worlds
+   ivoire chaud · vert officinal · feuille d'or en accent ponctuel
+   ═══════════════════════════════════════════════════════════════
+
+   HIÉRARCHIE DES COULEURS
+   1. vert        — identité. Fonds profonds, CTA, liens actifs.
+   2. sauge       — accents intermédiaires, filets, surcharges.
+   3. botanique   — teintes douces (badges, panneaux, succès).
+   4. ivoire/crème— les fonds. Jamais de blanc pur.
+   5. encre       — typographie, légèrement verdie pour s'accorder
+                    aux verts au lieu de tirer vers le brun.
+   6. champagne   — relicat : détail précieux uniquement (étoiles,
+                    filet d'un lien). Une touche, jamais une surface.
    ═══════════════════════════════════════════════════════════════ */
 
 @theme {
+  /* ── Vert officinal (identité) ───────────────── */
+  --color-vert: #1b3b2c; /* vert pharmacie profond — couleur de marque */
+  --color-vert-2: #122a1e; /* survol / fond plus profond */
+  --color-vert-3: #2f5a44; /* vert lisible sur fond clair (liens) */
+  --color-vert-soft: #dfe8dd;
+
+  /* ── Sauge (accent intermédiaire) ────────────── */
+  --color-sage: #89a391;
+  --color-sage-2: #6b8b76;
+  --color-sage-3: #b4c8b8;
+
+  /* ── Botanique (teintes douces) ──────────────── */
+  --color-botanical: #e7ede4;
+  --color-botanical-2: #d5e0d3;
+
   /* ── Paper & grounds ─────────────────────────── */
-  --color-paper: #f2ecdf; /* warm ivory */
-  --color-paper-2: #eae2d1; /* deeper ivory — alternates */
-  --color-cream: #faf6ec; /* near-white warm ground for cards/forms */
-  --color-ivory: #f6f1e6;
-  --color-stone: #e0d7c3; /* hairlines & neutral fills */
-  --color-stone-2: #c6bba1;
-  --color-sand: #b2a487;
-  --color-sand-2: #97885f;
+  --color-paper: #f4f0e7; /* ivoire chaud — fond de page */
+  --color-paper-2: #ebe5d7;
+  --color-cream: #fbf8f1; /* blanc chaud — cartes, formulaires */
+  --color-ivory: #f7f3ea;
+  --color-stone: #e3dcca; /* filets */
+  --color-stone-2: #c9c0a9;
+  --color-sand: #b5a98d;
+  --color-sand-2: #94876a;
 
-  /* ── Ink & text ──────────────────────────────── */
-  --color-ink: #211b12; /* warm near-black */
-  --color-charcoal: #38322a;
-  --color-charcoal-2: #52493e;
-  --color-muted: #6d6253;
-  --color-muted-2: #988b72;
+  /* ── Ink & text (verdie, pas brunie) ─────────── */
+  --color-ink: #1b201c;
+  --color-charcoal: #353b34;
+  --color-charcoal-2: #4e544b;
+  --color-muted: #6b7368;
+  --color-muted-2: #959c8b;
 
-  /* ── Champagne (signature accent) ───────────── */
+  /* ── Champagne — accent relicat ──────────────── */
   --color-champagne: #a3803f;
   --color-champagne-2: #87662e;
   --color-champagne-3: #cbb078;
@@ -35,9 +69,9 @@
   --color-brass: #6f5526;
 
   /* ── Campaign color worlds (use deliberately) ─ */
-  --color-noir: #16120c; /* campaign ground */
-  --color-noir-2: #221c13;
-  --color-terra: #96522f; /* terracotta accent */
+  --color-noir: #12170f; /* fond de campagne, vert-noir */
+  --color-noir-2: #1a2119;
+  --color-terra: #96522f;
   --color-terra-2: #75391f;
   --color-terra-soft: #ecd8c7;
   --color-olive: #5f6236;
@@ -45,12 +79,12 @@
   --color-linen: #dfd2b4;
 
   /* ── Semantic (restrained) ───────────────────── */
-  --color-success: #54704a;
-  --color-success-soft: #e4ead9;
-  --color-warning: #91632c;
-  --color-warning-soft: #f0e4cc;
-  --color-error: #96412f;
-  --color-error-soft: #f0dbd3;
+  --color-success: #3f6b4e;
+  --color-success-soft: #e7ede4;
+  --color-warning: #8a6320;
+  --color-warning-soft: #f2e6ce;
+  --color-error: #8f3b2c;
+  --color-error-soft: #f1ddd7;
 
   /* ── Admin — maison back office (warm noir) ──── */
   --color-admin-bg: #17130d;
@@ -77,34 +111,37 @@
   --text-display-sm: clamp(1.35rem, 2vw, 1.7rem);
   --text-display-sm--line-height: 1.18;
   --text-display-sm--letter-spacing: -0.005em;
-  --text-lead: 1.125rem;
-  --text-lead--line-height: 1.6;
+  --text-lead: 1.0625rem;
+  --text-lead--line-height: 1.65;
   --text-body: 0.9375rem;
-  --text-body--line-height: 1.7;
-  --text-small: 0.8125rem;
-  --text-micro: 0.75rem;
+  --text-body--line-height: 1.72;
+  --text-small: 0.8125rem; /* 13px */
+  --text-micro: 0.6875rem; /* 11px — plus petit autorisé : badges, méta */
   --text-eyebrow: 0.75rem;
-  --text-eyebrow--line-height: 1.45;
-  --text-eyebrow--letter-spacing: 0.03em;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.11em;
+  --text-eyebrow--font-weight: 600;
 
-  /* ── Spacing (architectural, generous) ───────── */
-  --spacing-section: 8.5rem;
-  --spacing-section-sm: 5.5rem;
+  /* ── Spacing (rythme de 4 px, respiration large) ── */
+  --spacing-section: 8rem;
+  --spacing-section-sm: 5rem;
   --spacing-gutter: 1.25rem;
   --spacing-gutter-lg: clamp(2rem, 5vw, 4rem);
 
-  /* ── Radius (architectural near-zero) ────────── */
+  /* ── Radius — architecturale, quasi nulle ────── */
   --radius-none: 0;
-  --radius-xs: 1px;
-  --radius-sm: 2px;
-  --radius-md: 3px;
-  --radius-lg: 4px;
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-pill: 999px;
 
-  /* ── Shadows (rare, editorial) ───────────────── */
-  --shadow-whisper: 0 1px 0 rgba(33, 27, 18, 0.06);
-  --shadow-soft: 0 10px 40px -20px rgba(33, 27, 18, 0.18);
-  --shadow-float: 0 24px 60px -30px rgba(33, 27, 18, 0.28);
-  --shadow-drawer: -14px 0 70px -34px rgba(33, 27, 18, 0.32);
+  /* ── Shadows (rares, éditoriales, vertes) ────── */
+  --shadow-whisper: 0 1px 0 rgba(27, 32, 28, 0.05);
+  --shadow-soft: 0 12px 36px -22px rgba(27, 32, 28, 0.20);
+  --shadow-lift: 0 20px 46px -26px rgba(27, 32, 28, 0.22);
+  --shadow-float: 0 26px 60px -32px rgba(27, 32, 28, 0.28);
+  --shadow-drawer: -16px 0 60px -34px rgba(27, 32, 28, 0.30);
 
   /* ── Motion grammar ──────────────────────────── */
   --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
@@ -139,11 +176,11 @@
     font-optical-sizing: auto;
   }
   ::selection {
-    background: var(--color-champagne-3);
-    color: var(--color-ink);
+    background: var(--color-botanical-2);
+    color: var(--color-vert-2);
   }
   :focus-visible {
-    outline: 1.5px solid var(--color-champagne);
+    outline: 1.5px solid var(--color-vert-3);
     outline-offset: 3px;
   }
   button,
@@ -197,9 +234,10 @@
 @utility eyebrow {
   font-size: var(--text-eyebrow);
   letter-spacing: var(--text-eyebrow--letter-spacing);
-  font-weight: 600;
-  color: var(--color-muted);
+  font-weight: var(--text-eyebrow--font-weight);
+  color: var(--color-sage-2);
   font-family: var(--font-body);
+  font-variant-numeric: tabular-nums;
 }
 
 @utility rule-label {
@@ -208,14 +246,14 @@
   gap: 0.75rem;
   font-size: var(--text-eyebrow);
   letter-spacing: var(--text-eyebrow--letter-spacing);
-  font-weight: 600;
-  color: var(--color-muted);
+  font-weight: var(--text-eyebrow--font-weight);
+  color: var(--color-sage-2);
   &::before {
     content: "";
     width: 2rem;
     height: 1px;
     background: currentColor;
-    opacity: 0.55;
+    opacity: 0.7;
   }
 }
 
@@ -233,62 +271,57 @@
   padding: 0.8rem 1rem;
   color: var(--color-ink);
   border-radius: var(--radius-xs);
-  box-shadow: inset 0 1px 0 rgba(33, 27, 18, 0.03);
-  transition: border-color var(--duration-fast) var(--ease-calm);
+  box-shadow: inset 0 1px 0 rgba(27, 32, 28, 0.03);
+  transition:
+    border-color var(--duration-fast) var(--ease-calm),
+    box-shadow var(--duration-fast) var(--ease-calm);
   &::placeholder {
     color: var(--color-muted-2);
   }
   &:focus {
     outline: none;
-    border-color: var(--color-champagne);
-    box-shadow: 0 0 0 3px rgba(163, 128, 63, 0.12);
+    border-color: var(--color-vert-3);
+    box-shadow: 0 0 0 3px rgba(47, 90, 68, 0.12);
   }
 }
 
 /* ── Buttons — editorial, not pill-shaped ─────────────────────── */
 @utility btn-primary {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.65rem;
   min-height: 52px;
   padding: 0 2.1rem;
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-vert);
+  color: var(--color-cream);
   font-family: var(--font-body);
   font-size: 0.8125rem;
   letter-spacing: 0.02em;
   font-weight: 600;
   border-radius: var(--radius-xs);
-  overflow: hidden;
-  isolation: isolate;
   transition:
-    color var(--duration-fast) var(--ease-calm),
-    background-color var(--duration-fast) var(--ease-calm);
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--color-champagne-2);
-    transform: translateY(101%);
-    transition: transform 420ms var(--ease-luxe);
-  }
+    background-color 260ms var(--ease-calm),
+    transform 260ms var(--ease-calm),
+    box-shadow 260ms var(--ease-calm);
   &:hover {
-    color: #fff;
+    background: var(--color-vert-2);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-soft);
   }
-  &:hover::after {
+  &:active {
     transform: translateY(0);
+    box-shadow: none;
   }
   &:disabled {
-    opacity: 0.45;
+    opacity: 0.4;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
   }
 }
 
 @utility btn-light {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -296,19 +329,22 @@
   min-height: 52px;
   padding: 0 2.1rem;
   background: var(--color-paper);
-  color: var(--color-ink);
+  color: var(--color-vert);
   font-size: 0.8125rem;
   letter-spacing: 0.02em;
   font-weight: 600;
   border-radius: var(--radius-xs);
-  isolation: isolate;
-  transition: background-color var(--duration-fast) var(--ease-calm);
+  transition:
+    background-color 260ms var(--ease-calm),
+    transform 260ms var(--ease-calm);
   &:hover {
-    background: var(--color-champagne-3);
+    background: var(--color-botanical);
+    transform: translateY(-1px);
   }
   &:disabled {
     opacity: 0.45;
     cursor: not-allowed;
+    transform: none;
   }
 }
 
@@ -327,11 +363,13 @@
   font-weight: 600;
   border-radius: var(--radius-xs);
   transition:
-    background-color var(--duration-fast) var(--ease-calm),
-    color var(--duration-fast) var(--ease-calm);
+    background-color 260ms var(--ease-calm),
+    color 260ms var(--ease-calm),
+    border-color 260ms var(--ease-calm);
   &:hover {
-    background: var(--color-ink);
-    color: var(--color-paper);
+    background: var(--color-vert);
+    border-color: var(--color-vert);
+    color: var(--color-cream);
   }
   &:disabled {
     opacity: 0.45;
@@ -347,12 +385,14 @@
   font-size: 0.8125rem;
   letter-spacing: 0.02em;
   font-weight: 600;
-  color: var(--color-ink);
-  border-bottom: 1px solid var(--color-champagne);
-  transition: color var(--duration-fast) var(--ease-calm);
+  color: var(--color-vert-3);
+  border-bottom: 1px solid var(--color-sage-3);
+  transition:
+    color 260ms var(--ease-calm),
+    border-color 260ms var(--ease-calm);
   &:hover {
-    color: var(--color-champagne-2);
-    border-color: currentColor;
+    color: var(--color-vert);
+    border-color: var(--color-vert);
   }
 }
 
@@ -397,18 +437,41 @@
   }
 }
 
+/* ── Équilibrage du texte (titres courts, chapeaux) ───────────── */
+@utility text-balance {
+  text-wrap: balance;
+}
+@utility text-pretty {
+  text-wrap: pretty;
+}
+
 /* ── Skeleton loading ─────────────────────────────────────────── */
 @utility skeleton {
   position: relative;
   overflow: hidden;
   background: var(--color-stone);
+  border-radius: var(--radius-xs);
   &::after {
     content: "";
     position: absolute;
     inset: 0;
     transform: translateX(-100%);
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
-    animation: shimmer 2s var(--ease-calm) infinite;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: shimmer 2.4s var(--ease-calm) infinite;
+  }
+}
+
+/* Filet vertical discret, utilisé pour séparer deux blocs d'information. */
+@utility rule-v {
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-stone);
   }
 }
 

@@ -41,7 +41,7 @@ export function ToasterProvider({ children }: { children: ReactNode }) {
                 <p className="text-sm font-medium text-ink">{t.title}</p>
                 {t.description && <p className="mt-0.5 text-xs text-muted">{t.description}</p>}
                 {t.action && (
-                  <button onClick={() => { t.action?.onClick(); dismiss(t.id); }} className="mt-2 text-xs tracking-[0.02em] text-champagne-2 underline-offset-4 hover:underline">
+                  <button onClick={() => { t.action?.onClick(); dismiss(t.id); }} className="mt-2 text-xs tracking-[0.02em] text-vert underline-offset-4 hover:underline">
                     {t.action.label}
                   </button>
                 )}

@@ -63,11 +63,14 @@ export function MobileDrawer({
             className="fixed inset-y-0 left-0 z-[60] flex w-[88vw] max-w-sm flex-col bg-paper shadow-drawer lg:hidden"
           >
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-stone px-5">
-              <span className="font-display text-xl text-ink">Cléopâtre</span>
+              <span className="flex flex-col leading-none">
+                <span className="font-display text-xl text-ink">Cléopâtre</span>
+                <span className="mt-1.5 text-[9px] font-semibold tracking-[0.16em] text-sage-2">Espace Santé Beauté</span>
+              </span>
               <button
                 onClick={onClose}
                 aria-label="Fermer le menu"
-                className="flex h-11 w-11 items-center justify-center text-ink transition-colors hover:text-champagne-2"
+                className="flex h-11 w-11 items-center justify-center text-ink transition-colors duration-300 hover:text-vert"
               >
                 <CloseIcon />
               </button>
@@ -75,7 +78,7 @@ export function MobileDrawer({
 
             <button
               onClick={() => { onClose(); onSearch(); }}
-              className="mx-5 mt-4 flex h-12 shrink-0 items-center gap-3 border border-stone bg-cream/60 px-4 text-left text-sm text-muted transition-colors hover:border-champagne-2"
+              className="mx-5 mt-4 flex h-12 shrink-0 items-center gap-3 rounded-sm border border-stone bg-cream/70 px-4 text-left text-sm text-muted transition-colors duration-300 hover:border-sage"
             >
               <SearchIcon size={16} /> Rechercher un produit, une marque…
             </button>
@@ -86,7 +89,7 @@ export function MobileDrawer({
                   <Link
                     href="/boutique?sort=newest"
                     onClick={onClose}
-                    className="flex min-h-[48px] items-center justify-between border-b border-stone/50 py-3 text-[15px] font-semibold tracking-[0.04em] text-champagne-2"
+                    className="flex min-h-[52px] items-center justify-between border-b border-stone/60 py-3 text-[15px] font-semibold tracking-[0.04em] text-vert"
                   >
                     Nouveautés
                     <ChevronRightIcon size={14} />
@@ -95,7 +98,7 @@ export function MobileDrawer({
                 {groups.map((g) => (
                   <li key={g.id}>
                     <details className="group border-b border-stone/50">
-                      <summary className="flex min-h-[48px] cursor-pointer list-none items-center justify-between py-3 text-[16px] text-ink">
+                      <summary className="flex min-h-[52px] cursor-pointer list-none items-center justify-between py-3 font-display text-[17px] text-ink">
                         {g.name}
                         <ChevronDownIcon size={16} className="text-muted transition-transform duration-300 group-open:rotate-180" />
                       </summary>
@@ -104,7 +107,7 @@ export function MobileDrawer({
                           <Link
                             href={g.href}
                             onClick={onClose}
-                            className="flex min-h-[44px] items-center justify-between text-[14px] font-semibold text-champagne-2"
+                            className="flex min-h-[44px] items-center justify-between text-[14px] font-semibold text-vert"
                           >
                             Tout {g.name.toLowerCase()}
                             <ArrowRightIcon size={13} />
@@ -129,7 +132,7 @@ export function MobileDrawer({
                   <Link
                     href="/promotions"
                     onClick={onClose}
-                    className="flex min-h-[48px] items-center justify-between border-b border-stone/50 py-3 text-[15px] font-semibold tracking-[0.04em] text-champagne-2"
+                    className="flex min-h-[52px] items-center justify-between border-b border-stone/60 py-3 text-[15px] font-semibold tracking-[0.04em] text-vert"
                   >
                     Offres
                     <ChevronRightIcon size={14} />
@@ -138,13 +141,13 @@ export function MobileDrawer({
               </ul>
 
               <div className="mt-6 space-y-1">
-                <p className="px-1 pb-2 text-[10px] font-bold text-muted">Mon espace</p>
+                <p className="eyebrow px-1 pb-2">Mon espace</p>
                 <Link
                   href="/panier"
                   onClick={onClose}
                   className="flex min-h-[46px] items-center gap-3 px-3 text-[14px] text-ink"
                 >
-                  <CartIcon size={16} className="text-champagne-2" /> Mon panier
+                  <CartIcon size={16} className="text-vert" /> Mon panier
                 </Link>
                 {user ? (
                   <>
@@ -153,7 +156,7 @@ export function MobileDrawer({
                       onClick={onClose}
                       className="flex min-h-[46px] items-center gap-3 px-3 text-[14px] text-ink"
                     >
-                      <UserIcon size={16} className="text-champagne-2" />
+                      <UserIcon size={16} className="text-vert" />
                       Mon espace
                     </Link>
                     <Link
@@ -168,7 +171,7 @@ export function MobileDrawer({
                       onClick={onClose}
                       className="flex min-h-[46px] items-center gap-3 px-3 text-[14px] text-charcoal"
                     >
-                      <HeartIcon size={16} className="text-champagne-2" />
+                      <HeartIcon size={16} className="text-vert" />
                       Mes favoris
                     </Link>
                     {(user.role === "admin" || user.role === "support") && (
@@ -193,8 +196,8 @@ export function MobileDrawer({
               </div>
             </div>
 
-            <div className="shrink-0 border-t border-stone px-5 py-4 text-[10px] tracking-[0.02em] text-muted">
-              <div className="flex items-center justify-between">
+            <div className="shrink-0 border-t border-stone bg-cream px-5 py-4">
+              <div className="flex items-center justify-between text-micro font-semibold tracking-[0.08em] text-muted">
                 <span>Conseil 71 450 210</span>
                 <span>Livraison 24–72 h</span>
               </div>

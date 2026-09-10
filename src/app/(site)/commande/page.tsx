@@ -12,7 +12,7 @@ export default async function CommandePage() {
   return (
     <div className="border-b border-stone bg-cream/60">
       <div className="container-lux py-8 lg:py-10">
-        <p className="eyebrow mb-4 flex items-center gap-3 text-muted"><span className="font-display text-lg italic text-champagne-2">Commande</span> Un dernier regard, puis c&apos;est entre nos mains</p>
+        <p className="eyebrow mb-4 flex items-center gap-3 text-muted"><span className="font-display text-lg italic text-vert">Commande</span> Un dernier regard, puis c&apos;est entre nos mains</p>
         <CheckoutFlow user={user} savedAddresses={saved} stores={storeRows} />
       </div>
     </div>

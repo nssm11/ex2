@@ -37,7 +37,7 @@ export async function Listing({
       <aside className="hidden lg:col-span-3 lg:block"><div className="sticky top-28"><FilterPanel facets={facets} hideBrands={hideBrands} hideConcerns={hideConcerns} /></div></aside>
       <div className="lg:col-span-9">
         <div className="mb-6 flex items-center justify-between gap-4 border-b border-stone pb-4">
-          <div className="flex items-center gap-3"><MobileFilters facets={facets} hideBrands={hideBrands} hideConcerns={hideConcerns} /><p className="text-xs text-muted">{total} produit{total > 1 ? "s" : ""}</p></div>
+          <div className="flex items-center gap-3"><MobileFilters facets={facets} hideBrands={hideBrands} hideConcerns={hideConcerns} /><p className="text-sm tabular-nums text-muted"><span className="font-medium text-ink">{total}</span> produit{total > 1 ? "s" : ""}</p></div>
           <SortSelect />
         </div>
         {items.length === 0 ? (
@@ -51,9 +51,9 @@ export async function Listing({
           <>
             <ProductGrid items={items} wishedIds={wished} isAuthed={!!user} />
             {pages > 1 && (
-              <nav className="mt-14 flex items-center justify-center gap-2" aria-label="Pagination">
+              <nav className="mt-16 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination">
                 {Array.from({ length: pages }).map((_, i) => (
-                  <Link key={i} href={qs(i + 1)} aria-current={page === i + 1 ? "page" : undefined} className={`flex h-11 w-11 items-center justify-center text-sm tabular-nums ${page === i + 1 ? "bg-ink text-paper" : "border border-stone-2 text-charcoal hover:border-ink"}`}>{i + 1}</Link>
+                  <Link key={i} href={qs(i + 1)} aria-current={page === i + 1 ? "page" : undefined} className={`flex h-11 w-11 items-center justify-center rounded-sm text-sm tabular-nums transition-colors duration-300 ${page === i + 1 ? "bg-vert text-cream" : "border border-stone-2 text-charcoal hover:border-vert hover:text-vert"}`}>{i + 1}</Link>
                 ))}
               </nav>
             )}

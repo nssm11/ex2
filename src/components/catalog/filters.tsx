@@ -2,7 +2,8 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { CloseIcon, FilterIcon, SortIcon } from "@/components/icons";
+import { ChevronDownIcon, CloseIcon, FilterIcon, SortIcon } from "@/components/icons";
+import { Checkbox } from "@/components/ui/primitives";
 import { formatDTShort } from "@/lib/money";
 import type { SortKey } from "@/lib/catalog";
 import { tweenExit } from "@/lib/motion";
@@ -38,18 +39,16 @@ export function useFilterParams() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <details open className="group border-b border-stone py-4">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-xs tracking-[0.02em] text-ink">{title}<span className="text-muted transition-transform duration-500 group-open:rotate-45"><span className="block text-lg leading-none">+</span></span></summary>
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-sm font-medium text-ink">
+        {title}
+        <ChevronDownIcon size={14} className="shrink-0 text-muted transition-transform duration-300 group-open:rotate-180" />
+      </summary>
       <div className="pt-3">{children}</div>
     </details>
   );
 }
 function Check({ checked, onChange, label, count }: { checked: boolean; onChange: () => void; label: string; count?: number }) {
-  return (
-    <label className="flex min-h-10 cursor-pointer items-center gap-3 text-sm text-charcoal hover:text-ink">
-      <input type="checkbox" checked={checked} onChange={onChange} className="h-4 w-4 shrink-0 accent-ink" />
-      <span className="flex-1">{label}</span>{count != null && <span className="text-xs text-muted-2">{count}</span>}
-    </label>
-  );
+  return <Checkbox checked={checked} onChange={onChange} label={label} count={count} />;
 }
 
 export function FilterPanel({ facets, hideConcerns = false, hideBrands = false }: { facets: Facets; hideConcerns?: boolean; hideBrands?: boolean }) {
@@ -70,8 +69,11 @@ export function FilterPanel({ facets, hideConcerns = false, hideBrands = false }
   return (
     <div className={f.pending ? "opacity-60 transition-opacity" : "transition-opacity"}>
       <div className="flex items-center justify-between border-b border-stone pb-3">
-        <span className="flex items-center gap-2 text-xs tracking-[0.02em] text-ink"><FilterIcon size={14} /> Filtres {f.activeCount > 0 && <span className="bg-ink px-1.5 py-0.5 text-[10px] text-paper">{f.activeCount}</span>}</span>
-        {f.activeCount > 0 && <button onClick={f.clearAll} className="min-h-11 text-xs text-muted underline-offset-4 hover:text-ink hover:underline">Tout effacer</button>}
+        <span className="flex items-center gap-2 text-sm font-medium text-ink">
+          <FilterIcon size={14} /> Filtres
+          {f.activeCount > 0 && <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-pill bg-vert px-1.5 text-[10px] font-semibold tabular-nums text-cream">{f.activeCount}</span>}
+        </span>
+        {f.activeCount > 0 && <button onClick={f.clearAll} className="min-h-11 text-xs text-muted underline-offset-4 transition-colors duration-300 hover:text-vert hover:underline">Tout effacer</button>}
       </div>
       <Section title="Disponibilité">
         <Check checked={f.sp.get("stock") === "1"} onChange={() => f.set("stock", f.sp.get("stock") === "1" ? null : "1")} label="En stock uniquement" />
@@ -89,11 +91,11 @@ export function FilterPanel({ facets, hideConcerns = false, hideBrands = false }
           <input inputMode="decimal" value={min ? String(Number(min) / (min.length > 4 ? 1000 : 1)) : ""} onChange={(e) => setMin(e.target.value)} placeholder="Min" aria-label="Prix minimum (DT)" className="field h-11 min-h-0 px-3 text-sm" />
           <span className="text-muted-2">–</span>
           <input inputMode="decimal" value={max ? String(Number(max) / (max.length > 4 ? 1000 : 1)) : ""} onChange={(e) => setMax(e.target.value)} placeholder="Max" aria-label="Prix maximum (DT)" className="field h-11 min-h-0 px-3 text-sm" />
-          <button className="btn-secondary h-11 min-h-0 px-3 text-[11px]">OK</button>
+          <button className="btn-secondary h-11 min-h-0 px-4 text-xs">OK</button>
         </form>
       </Section>
       <Section title="Note minimale">
-        <div className="flex gap-2">{[4, 3].map((r) => <button key={r} onClick={() => f.set("rating", f.sp.get("rating") === String(r) ? null : String(r))} className={`min-h-11 border px-3 text-xs ${f.sp.get("rating") === String(r) ? "border-ink bg-ink text-paper" : "border-stone-2 text-charcoal hover:border-ink"}`}>{r}★ et +</button>)}</div>
+        <div className="flex gap-2">{[4, 3].map((r) => <button key={r} onClick={() => f.set("rating", f.sp.get("rating") === String(r) ? null : String(r))} className={`min-h-11 border px-4 text-xs transition-colors duration-300 ${f.sp.get("rating") === String(r) ? "border-vert bg-vert text-cream" : "border-stone-2 text-charcoal hover:border-vert hover:text-vert"}`}>{r}★ et +</button>)}</div>
       </Section>
     </div>
   );
@@ -103,8 +105,9 @@ export function SortSelect() {
   const f = useFilterParams();
   return (
     <label className="flex items-center gap-2 text-xs text-muted">
-      <SortIcon size={14} /><span className="hidden sm:inline">Trier :</span>
-      <select value={(f.sp.get("sort") as SortKey) ?? "featured"} onChange={(e) => f.set("sort", e.target.value === "featured" ? null : e.target.value)} className="min-h-11 bg-transparent text-sm text-ink focus:outline-none" aria-label="Trier par">
+      <SortIcon size={14} className="shrink-0" />
+      <span className="hidden sm:inline">Trier&nbsp;:</span>
+      <select value={(f.sp.get("sort") as SortKey) ?? "featured"} onChange={(e) => f.set("sort", e.target.value === "featured" ? null : e.target.value)} className="min-h-11 cursor-pointer border border-stone bg-cream/60 px-3 text-sm text-ink transition-colors duration-300 hover:border-sage focus:outline-none" aria-label="Trier par">
         {SORTS.map((s) => <option key={s.v} value={s.v}>{s.l}</option>)}
       </select>
     </label>
@@ -118,7 +121,7 @@ export function MobileFilters(props: { facets: Facets; hideConcerns?: boolean; h
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [open]);
   return (
     <>
-      <button onClick={() => setOpen(true)} className="flex min-h-11 items-center gap-2 border border-stone-2 px-4 text-xs tracking-[0.02em] text-ink lg:hidden"><FilterIcon size={14} /> Filtres {f.activeCount > 0 && `(${f.activeCount})`}</button>
+      <button onClick={() => setOpen(true)} className="flex min-h-11 items-center gap-2 border border-stone-2 px-4 text-sm text-ink transition-colors duration-300 hover:border-vert hover:text-vert lg:hidden"><FilterIcon size={14} /> Filtres {f.activeCount > 0 && `(${f.activeCount})`}</button>
       <AnimatePresence>
         {open && (
           <>

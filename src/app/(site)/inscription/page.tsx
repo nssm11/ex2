@@ -8,7 +8,7 @@ export default async function InscriptionPage({ searchParams }: { searchParams: 
   const { next } = await searchParams;
   if (await getCurrentUser()) redirect(next && next.startsWith("/") ? next : "/compte");
   return (
-    <AuthShell kicker="Nouvelle cliente" title={<>Rejoindre la <em className="text-champagne-2">maison Cléopâtre</em></>}>
+    <AuthShell kicker="Nouvelle cliente" title={<>Rejoindre la <em className="text-vert">maison Cléopâtre</em></>}>
       <RegisterForm next={next} />
     </AuthShell>
   );

@@ -45,7 +45,7 @@ export function BuyBox({ p, wished, isAuthed }: { p: P; wished: boolean; isAuthe
     <>
       <div className="space-y-5">
         {out ? (
-          <div className="border border-stone-2/70 bg-cream px-4 py-3.5">
+          <div className="rounded-sm border border-stone-2/70 bg-cream px-5 py-4">
             <p className="text-[13px] font-semibold text-error">Épuisé — rupture de stock</p>
             <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
               Ce produit est momentanément indisponible. Nous le remettons en vente dès réassort&nbsp;: contactez nos boutiques pour être prévenu(e).
@@ -65,19 +65,19 @@ export function BuyBox({ p, wished, isAuthed }: { p: P; wished: boolean; isAuthe
                 : <motion.span key="add" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">{out ? "Épuisé" : `Ajouter au panier · ${formatDT(p.priceMillimes * qty)}`}</motion.span>}
             </AnimatePresence>
           </button>
-          <button onClick={wish} disabled={pending} aria-pressed={w} aria-label={w ? "Retirer des favoris" : "Ajouter aux favoris"} className={`flex h-12 w-12 shrink-0 items-center justify-center border transition-colors ${w ? "border-champagne text-champagne-2" : "border-ink text-ink hover:bg-ink hover:text-paper"}`}>
+          <button onClick={wish} disabled={pending} aria-pressed={w} aria-label={w ? "Retirer des favoris" : "Ajouter aux favoris"} className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-sm border transition-all duration-300 ${w ? "border-vert bg-vert text-cream" : "border-stone-2 text-ink hover:border-vert hover:bg-vert hover:text-cream"}`}>
             <motion.span animate={w && !reduce ? { scale: [1, 1.2, 1] } : {}} transition={{ duration: 0.5, ease: EASE_LUXE }} className="flex"><HeartIcon size={18} filled={w} /></motion.span>
           </button>
         </div>
         <ul className="space-y-2.5 border-t border-stone pt-5 text-sm text-charcoal">
-          <li className="flex items-center gap-3"><TruckIcon size={16} className="text-champagne-2" /> Livraison 24–72 h · offerte dès {formatDT(FREE_SHIPPING_THRESHOLD)}</li>
-          <li className="flex items-center gap-3"><StoreIcon size={16} className="text-champagne-2" /> Retrait gratuit sous 2 h à Ezzahra ou Hammam-Lif</li>
-          <li className="flex items-center gap-3"><ShieldIcon size={16} className="text-champagne-2" /> Produit authentique, distribution officielle</li>
+          <li className="flex items-center gap-3"><TruckIcon size={16} className="shrink-0 text-vert" /> Livraison 24–72 h · offerte dès {formatDT(FREE_SHIPPING_THRESHOLD)}</li>
+          <li className="flex items-center gap-3"><StoreIcon size={16} className="shrink-0 text-vert" /> Retrait gratuit sous 2 h à Ezzahra ou Hammam-Lif</li>
+          <li className="flex items-center gap-3"><ShieldIcon size={16} className="shrink-0 text-vert" /> Produit authentique, distribution officielle</li>
         </ul>
       </div>
       {/* Sticky mobile bar */}
       <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-stone bg-paper/95 px-4 py-3 backdrop-blur-xl lg:hidden" style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
-        <div className="min-w-0 flex-1"><p className="truncate text-xs text-muted">{p.name}</p><p className="text-sm font-medium tabular-nums text-ink">{formatDT(p.priceMillimes * qty)}</p></div>
+        <div className="min-w-0 flex-1"><p className="truncate text-micro text-muted">{p.name}</p><p className="mt-0.5 text-[15px] font-semibold tabular-nums text-ink">{formatDT(p.priceMillimes * qty)}</p></div>
         <button onClick={add} disabled={out} aria-disabled={out} className="btn-primary px-6">{added ? <CheckIcon size={16} /> : out ? "Épuisé" : "Ajouter"}</button>
       </div>
     </>

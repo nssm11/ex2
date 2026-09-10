@@ -16,14 +16,14 @@ export default async function BoutiquesPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
       {/* Intro */}
       <section className="grid lg:grid-cols-2">
-        <div className="flex items-center bg-noir text-paper">
+        <div className="flex items-center bg-vert text-cream">
           <div className="container-lux py-14 lg:py-24 lg:pr-16">
-            <p className="eyebrow mb-6 flex items-center gap-3 text-paper/55"><span className="font-display text-lg italic text-champagne-3">La maison</span> Deux adresses</p>
-            <h1 className="font-display text-display-lg">Venez rencontrer <em className="text-champagne-3">vos pharmaciens</em></h1>
-            <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-paper/70">Au cœur d&apos;Ezzahra et de Hammam-Lif, nos équipes vous reçoivent pour un conseil personnalisé — analyse de besoin, choix d&apos;actifs, retrait de votre commande en ligne sous deux heures.</p>
-            <ul className="mt-9 flex flex-wrap gap-x-8 gap-y-3 text-[11px] font-bold tracking-[0.02em] text-paper/60">
-              <li className="flex items-center gap-2"><TruckIcon size={14} className="text-champagne-3" /> Livraison depuis nos boutiques</li>
-              <li className="flex items-center gap-2"><StoreIcon size={14} className="text-champagne-3" /> Retrait 2 h</li>
+            <p className="eyebrow mb-6 flex items-center gap-3 text-cream/55"><span className="font-display text-lg italic text-sage-3">La maison</span> Deux adresses</p>
+            <h1 className="font-display text-display-lg">Venez rencontrer <em className="text-sage-3">vos pharmaciens</em></h1>
+            <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-cream/70">Au cœur d&apos;Ezzahra et de Hammam-Lif, nos équipes vous reçoivent pour un conseil personnalisé — analyse de besoin, choix d&apos;actifs, retrait de votre commande en ligne sous deux heures.</p>
+            <ul className="mt-9 flex flex-wrap gap-x-8 gap-y-3 text-micro font-semibold tracking-[0.08em] text-cream/60">
+              <li className="flex items-center gap-2"><TruckIcon size={14} className="text-sage-3" /> Livraison depuis nos boutiques</li>
+              <li className="flex items-center gap-2"><StoreIcon size={14} className="text-sage-3" /> Retrait 2 h</li>
             </ul>
           </div>
         </div>
@@ -38,10 +38,10 @@ export default async function BoutiquesPage() {
           <div key={s.id} className="bg-paper p-8 lg:p-12">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-baseline gap-4">
-                <span className="font-display text-lg italic text-champagne-2">{String(i + 1).padStart(2, "0")}</span>
+                <span className="font-display text-lg italic text-vert">{String(i + 1).padStart(2, "0")}</span>
                 <h2 className="font-display text-display-sm text-ink">{s.name.replace("Cléopâtre ", "")}</h2>
               </div>
-              <MapPinIcon size={20} className="shrink-0 text-champagne-2" />
+              <MapPinIcon size={20} className="shrink-0 text-vert" />
             </div>
             <dl className="mt-9 space-y-5 border-t border-stone pt-7 text-sm">
               <div className="grid grid-cols-[24px_1fr] gap-3">
@@ -77,7 +77,7 @@ export default async function BoutiquesPage() {
             { i: TruckIcon, t: "Livraison depuis le Grand Tunis", d: "Nos boutiques préparent et expédient vos commandes partout en Tunisie, 24–72 h." },
           ].map((x) => (
             <div key={x.t} className="bg-cream px-8 py-10">
-              <x.i size={22} className="text-champagne-2" />
+              <x.i size={22} className="text-vert" />
               <h2 className="mt-5 font-display text-xl text-ink">{x.t}</h2>
               <p className="mt-2 text-sm leading-relaxed text-muted">{x.d}</p>
             </div>

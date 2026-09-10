@@ -76,7 +76,7 @@ export default async function SuiviPage({ searchParams }: { searchParams: Promis
           <div className="flex flex-wrap items-end justify-between gap-6 border-b border-stone pb-8">
             <div>
               <p className="eyebrow mb-2">Commande</p>
-              <p className="font-mono text-xl text-ink">{order.number}</p>
+              <p className="break-all font-mono text-lg text-ink sm:text-xl">{order.number}</p>
               <p className="mt-1 text-sm text-muted">Passée le {formatDate(order.createdAt)}</p>
             </div>
             <div className="text-right">
@@ -97,7 +97,7 @@ export default async function SuiviPage({ searchParams }: { searchParams: Promis
                 <li key={i.id} className="flex gap-4 py-4">
                   <div className="relative h-20 w-16 shrink-0 bg-stone">{i.image && <Image src={i.image} alt="" fill sizes="64px" className="object-cover" />}</div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-[10px] tracking-[0.02em] text-muted">{i.brandName}</p>
+                    <p className="text-micro tracking-[0.08em] text-muted">{i.brandName}</p>
                     <p className="text-sm text-ink">{i.name}</p>
                     <p className="text-xs text-muted">{i.quantity} × {formatDT(i.unitPriceMillimes)}</p>
                   </div>
@@ -110,7 +110,7 @@ export default async function SuiviPage({ searchParams }: { searchParams: Promis
           {/* Delivery + actions */}
           <div className="mt-10 grid gap-8 sm:grid-cols-2">
             <div className="border border-stone bg-cream p-5 text-sm">
-              <p className="eyebrow mb-2 flex items-center gap-2"><PackageIcon size={14} className="text-champagne-2" /> Livraison</p>
+              <p className="eyebrow mb-2 flex items-center gap-2"><PackageIcon size={14} className="text-vert" /> Livraison</p>
               <p className="text-ink">{SHIPPING_LABELS[order.shippingMethod]}</p>
               <p className="mt-1 text-charcoal">
                 {order.shippingAddress.fullName}<br />

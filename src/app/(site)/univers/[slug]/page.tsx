@@ -25,7 +25,7 @@ export default async function UniversPage({ params, searchParams }: { params: Pr
       <PageIntro
         index={`${String(idx + 1).padStart(2, "0")} / ${String(all.length).padStart(2, "0")}`}
         kicker="Univers"
-        title={<>{u.name} — <em className="text-champagne-2">le rayon</em></>}
+        title={<>{u.name} — <em className="text-vert">le rayon</em></>}
         intro={u.story}
         image={u.image}
         imageAlt={u.name}
@@ -39,7 +39,7 @@ export default async function UniversPage({ params, searchParams }: { params: Pr
               <li key={c.id}>
                 <Link href={`/categorie/${c.slug}`} className="group flex h-full min-h-24 items-center justify-between gap-4 bg-paper px-5 py-4 transition-colors duration-500 hover:bg-cream">
                   <span className="flex items-center gap-4">
-                    <span className="font-display text-xs italic text-champagne-2">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-display text-xs italic text-vert">{String(i + 1).padStart(2, "0")}</span>
                     <span className="text-[15px] text-ink">{c.name}</span>
                   </span>
                   <ArrowRightIcon size={15} className="text-sand-2 transition-transform duration-500 group-hover:translate-x-1 group-hover:text-ink" />
@@ -58,8 +58,8 @@ export default async function UniversPage({ params, searchParams }: { params: Pr
       {others.length > 0 && (
         <div className="border-t border-stone bg-cream">
           <div className="container-lux flex flex-wrap gap-x-10 gap-y-4 py-8">
-            <p className="mr-2 flex items-center text-[10px] font-bold tracking-[0.02em] text-muted">Autres univers</p>
-            {others.map((o) => <Link key={o.id} href={`/univers/${o.slug}`} className="flex items-center gap-2 font-display text-lg text-charcoal transition-colors hover:text-champagne-2"><span className="text-xs italic text-muted-2">→</span>{o.name}</Link>)}
+            <p className="mr-2 flex items-center text-micro font-semibold tracking-[0.08em] text-muted">Autres univers</p>
+            {others.map((o) => <Link key={o.id} href={`/univers/${o.slug}`} className="flex items-center gap-2 font-display text-lg text-charcoal transition-colors hover:text-vert"><span className="text-xs italic text-muted-2">→</span>{o.name}</Link>)}
           </div>
         </div>
       )}

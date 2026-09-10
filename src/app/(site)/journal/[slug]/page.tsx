@@ -22,14 +22,14 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }} />
-      <div className="bg-noir text-paper">
+      <div className="bg-vert text-cream">
         <div className="container-lux py-12 lg:py-16">
-          <Link href="/journal" className="inline-flex min-h-10 items-center gap-2 text-[11px] font-bold tracking-[0.02em] text-paper/60 transition-colors hover:text-champagne-3"><ArrowLeftIcon size={13} /> Le Journal</Link>
+          <Link href="/journal" className="inline-flex min-h-10 items-center gap-2 text-micro font-semibold tracking-[0.08em] text-cream/60 transition-colors hover:text-sage-3"><ArrowLeftIcon size={13} /> Le Journal</Link>
           <div className="mx-auto mt-10 max-w-3xl text-center">
-            <p className="eyebrow mb-6 text-paper/55">{a.tag} · {a.readMinutes} min de lecture</p>
+            <p className="eyebrow mb-6 text-cream/55">{a.tag} · {a.readMinutes} min de lecture</p>
             <h1 className="font-display text-display-md leading-tight sm:text-display-lg">{a.title}</h1>
-            <p className="mx-auto mt-6 max-w-xl text-[15px] italic leading-relaxed text-paper/65">{a.excerpt}</p>
-            <p className="mt-6 text-[10px] font-bold tracking-[0.02em] text-paper/40">{formatDate(a.publishedAt)} — L&apos;équipe Cléopâtre</p>
+            <p className="mx-auto mt-6 max-w-xl text-[15px] italic leading-relaxed text-cream/65">{a.excerpt}</p>
+            <p className="mt-6 text-micro font-semibold tracking-[0.08em] text-cream/40">{formatDate(a.publishedAt)} — L&apos;équipe Cléopâtre</p>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
             <p key={i} className={`font-display ${i === 0 ? "first-para text-xl leading-[1.75] text-ink sm:text-[1.35rem]" : "mt-7 text-[1.125rem] leading-[1.85] text-charcoal"}`}>{p}</p>
           ))}
           <div className="mt-14 flex items-center gap-5 border-t border-stone pt-8">
-            <span className="h-px w-10 bg-champagne" />
+            <span className="h-px w-10 bg-vert" />
             <p className="text-xs leading-relaxed text-muted">Cet article est donné à titre informatif. En cas de doute sur votre peau ou votre santé, nos pharmaciens vous reçoivent à Ezzahra et Hammam-Lif, sans rendez-vous.</p>
           </div>
         </div>
@@ -64,8 +64,8 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
                     {o.image && <Image src={o.image} alt="" fill sizes="96px" className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.06]" />}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[9px] font-bold tracking-[0.02em] text-muted">{o.tag} · {o.readMinutes} min</p>
-                    <p className="mt-1.5 font-display text-xl text-ink transition-colors group-hover:text-champagne-2">{o.title}</p>
+                    <p className="text-micro font-semibold tracking-[0.08em] text-muted">{o.tag} · {o.readMinutes} min</p>
+                    <p className="mt-1.5 font-display text-xl text-ink transition-colors group-hover:text-vert">{o.title}</p>
                   </div>
                   <ArrowRightIcon size={16} className="ml-auto shrink-0 text-sand-2 transition-transform duration-500 group-hover:translate-x-1 group-hover:text-ink" />
                 </Link>

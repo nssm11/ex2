@@ -119,12 +119,12 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                   {recent.length > 0 && (
                     <div>
                       <p className="eyebrow mb-3">Recherches récentes</p>
-                      <ul className="space-y-1">{recent.map((r) => <li key={r}><button onClick={() => go(r)} className="flex min-h-11 w-full items-center justify-between text-left text-[15px] text-charcoal hover:text-ink">{r}<ArrowRightIcon size={14} className="text-sand-2" /></button></li>)}</ul>
+                      <ul className="space-y-1">{recent.map((r) => <li key={r}><button onClick={() => go(r)} className="flex min-h-11 w-full items-center justify-between text-left text-[15px] text-charcoal hover:text-ink">{r}<ArrowRightIcon size={14} className="text-sage" /></button></li>)}</ul>
                     </div>
                   )}
                   <div>
                     <p className="eyebrow mb-3">Recherches populaires</p>
-                    <ul className="flex flex-wrap gap-2">{POPULAR.map((p) => <li key={p}><button onClick={() => go(p)} className="min-h-11 border border-stone-2 px-4 text-sm text-charcoal hover:border-ink hover:text-ink">{p}</button></li>)}</ul>
+                    <ul className="flex flex-wrap gap-2">{POPULAR.map((p) => <li key={p}><button onClick={() => go(p)} className="min-h-11 border border-stone-2 px-4 text-sm text-charcoal transition-colors duration-300 hover:border-vert hover:text-vert">{p}</button></li>)}</ul>
                   </div>
                 </div>
               ) : (
@@ -133,11 +133,11 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                   <ul role="listbox">
                     {items.map((p, i) => (
                       <li key={p.id} role="option" aria-selected={idx === i}>
-                        <button onClick={() => { onClose(); router.push(`/produit/${p.slug}`); }} className={`flex w-full items-center gap-4 px-2 py-2.5 text-left transition-colors ${idx === i ? "bg-stone/60" : "hover:bg-stone/40"}`}>
-                          <div className="relative h-14 w-12 shrink-0 overflow-hidden bg-stone">{p.image && <Image src={p.image} alt="" fill sizes="48px" className="object-cover" />}</div>
+                        <button onClick={() => { onClose(); router.push(`/produit/${p.slug}`); }} className={`flex w-full items-center gap-4 px-2 py-2.5 text-left transition-colors duration-200 ${idx === i ? "bg-botanical" : "hover:bg-cream"}`}>
+                          <div className="relative aspect-square w-12 shrink-0 overflow-hidden rounded-sm bg-paper-2">{p.image && <Image src={p.image} alt="" fill sizes="48px" className="object-cover" />}</div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-[10px] tracking-[0.02em] text-muted">{p.brandName}</p>
-                            <p className="truncate text-sm text-ink">{p.name}</p>
+                            <p className="text-micro font-semibold tracking-[0.08em] text-sage-2">{p.brandName}</p>
+                            <p className="truncate font-display text-[15px] text-ink">{p.name}</p>
                           </div>
                           <span className="text-sm tabular-nums text-ink">{formatDT(p.priceMillimes)}</span>
                         </button>
@@ -159,7 +159,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                 </div>
               )}
             </div>
-            <div className="hidden items-center gap-4 border-t border-stone px-6 py-3 text-[11px] text-muted-2 sm:flex">
+            <div className="hidden items-center gap-4 border-t border-stone px-6 py-3 text-micro tracking-[0.06em] text-muted-2 sm:flex">
               <span><kbd className="border border-stone px-1">↑↓</kbd> naviguer</span><span><kbd className="border border-stone px-1">↵</kbd> ouvrir</span><span><kbd className="border border-stone px-1">échap</kbd> fermer</span>
             </div>
           </motion.div>

@@ -19,12 +19,12 @@ export default async function BesoinPage({ params, searchParams }: { params: Pro
   const i = all.findIndex((x) => x.id === c.id);
   return (
     <>
-      <section className="border-b border-stone bg-noir text-paper">
+      <section className="border-b border-stone bg-vert text-cream">
         <div className="container-lux py-10 lg:py-14">
-          <p className="eyebrow mb-6 flex items-center gap-3 text-paper/55"><span className="font-display text-lg italic text-champagne-3">{String(i + 1).padStart(2, "0")} / {String(all.length).padStart(2, "0")}</span> Par besoin</p>
+          <p className="eyebrow mb-6 flex items-center gap-3 text-cream/55"><span className="font-display text-lg italic text-sage-3">{String(i + 1).padStart(2, "0")} / {String(all.length).padStart(2, "0")}</span> Par besoin</p>
           <div className="grid items-end gap-8 lg:grid-cols-12">
-            <h1 className="font-display text-display-lg lg:col-span-8">{c.name} — <em className="text-champagne-3">que faire&nbsp;?</em></h1>
-            <p className="max-w-md text-sm leading-relaxed text-paper/65 lg:col-span-4 lg:pb-2">Sélection guidée par nos pharmaciens. Chaque produit ci-dessous répond à ce besoin précis.</p>
+            <h1 className="font-display text-display-lg lg:col-span-8">{c.name} — <em className="text-sage-3">que faire&nbsp;?</em></h1>
+            <p className="max-w-md text-sm leading-relaxed text-cream/65 lg:col-span-4 lg:pb-2">Sélection guidée par nos pharmaciens. Chaque produit ci-dessous répond à ce besoin précis.</p>
           </div>
         </div>
       </section>
@@ -33,8 +33,8 @@ export default async function BesoinPage({ params, searchParams }: { params: Pro
         <div className="container-lux py-8 lg:py-10">
           <div className="grid gap-8 lg:grid-cols-12">
             <div className="lg:col-span-7">
-              <div className="flex gap-5 border-l-2 border-champagne bg-paper p-6">
-                <InfoIcon size={20} className="mt-1 shrink-0 text-champagne-2" />
+              <div className="flex gap-5 border-l-2 border-sage bg-paper p-6">
+                <InfoIcon size={20} className="mt-1 shrink-0 text-vert" />
                 <p className="text-[15px] leading-[1.8] text-charcoal">{c.intro}</p>
               </div>
             </div>
@@ -42,7 +42,7 @@ export default async function BesoinPage({ params, searchParams }: { params: Pro
               <p className="eyebrow mb-4">Autres besoins</p>
               <div className="flex flex-wrap gap-2">
                 {all.filter((x) => x.id !== c.id).map((x) => (
-                  <Link key={x.id} href={`/besoin/${x.slug}`} className="inline-flex min-h-10 items-center border border-stone-2 bg-paper px-3.5 text-[11px] font-semibold tracking-[0.02em] text-charcoal transition-colors hover:border-ink hover:text-ink">{x.name}</Link>
+                  <Link key={x.id} href={`/besoin/${x.slug}`} className="inline-flex min-h-10 items-center border border-stone-2 bg-paper px-3.5 text-micro font-semibold tracking-[0.08em] text-charcoal transition-colors duration-300 hover:border-vert hover:text-vert">{x.name}</Link>
                 ))}
               </div>
             </nav>

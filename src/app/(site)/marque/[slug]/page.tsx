@@ -22,13 +22,13 @@ export default async function MarquePage({ params, searchParams }: { params: Pro
       <PageIntro
         index="Maison partenaire"
         kicker={b.country ?? "Laboratoire"}
-        title={<><em className="text-champagne-2">La maison</em> {b.name}</>}
+        title={<><em className="text-vert">La maison</em> {b.name}</>}
         intro={b.story}
         breadcrumbs={[{ href: "/marques", label: "Marques" }, { label: b.name }]}
       >
         <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-stone pt-6 text-xs text-muted">
-          <span className="flex items-center gap-2"><ShieldIcon size={14} className="text-champagne-2" /> Distribution officielle en Tunisie</span>
-          {b.isFeatured && <span className="flex items-center gap-2 text-champagne-2">Sélection maison</span>}
+          <span className="flex items-center gap-2"><ShieldIcon size={14} className="text-vert" /> Distribution officielle en Tunisie</span>
+          {b.isFeatured && <span className="flex items-center gap-2 text-vert">Sélection maison</span>}
           <Link href={`/marque/${b.slug}?sort=price_asc`} className="ml-auto text-charcoal underline-offset-4 hover:text-ink hover:underline">Trier par prix croissant</Link>
         </div>
       </PageIntro>

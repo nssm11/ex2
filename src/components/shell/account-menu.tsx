@@ -73,7 +73,7 @@ export function AccountMenu({ user, wishlistCount }: { user: SafeUser | null; wi
           aria-haspopup="menu"
           aria-expanded={open}
           aria-label={`Mon compte — ${user.firstName} ${user.lastName}`}
-          className="flex h-11 w-11 items-center justify-center text-ink transition-colors hover:text-champagne-2 focus-visible:text-champagne-2"
+          className="flex h-10 w-10 items-center justify-center text-ink transition-colors duration-300 hover:text-vert focus-visible:text-vert sm:h-11 sm:w-11"
         >
           <UserIcon />
         </button>
@@ -82,7 +82,7 @@ export function AccountMenu({ user, wishlistCount }: { user: SafeUser | null; wi
           ref={buttonRef as React.RefObject<HTMLAnchorElement>}
           href="/connexion"
           aria-label="Se connecter"
-          className="flex h-11 w-11 items-center justify-center text-ink transition-colors hover:text-champagne-2 focus-visible:text-champagne-2"
+          className="flex h-10 w-10 items-center justify-center text-ink transition-colors duration-300 hover:text-vert focus-visible:text-vert sm:h-11 sm:w-11"
         >
           <UserIcon />
         </Link>
@@ -98,12 +98,12 @@ export function AccountMenu({ user, wishlistCount }: { user: SafeUser | null; wi
             className="absolute right-0 top-full z-[60] mt-2 w-64 border border-stone bg-cream shadow-float"
           >
             <div className="border-b border-stone px-4 py-3">
-              <p className="text-[10px] font-bold tracking-[0.02em] text-muted">Bonjour</p>
+              <p className="text-micro font-semibold tracking-[0.08em] text-muted">Bonjour</p>
               <p className="mt-0.5 font-display text-lg italic leading-tight text-ink">
                 {user.firstName} {user.lastName}
               </p>
               {isStaff && (
-                <p className="mt-1 text-[9px] font-semibold tracking-[0.02em] text-champagne-2">
+                <p className="mt-1 text-micro font-semibold tracking-[0.08em] text-vert">
                   {user.role === "admin" ? "Administrateur" : "Support"}
                 </p>
               )}
@@ -114,19 +114,21 @@ export function AccountMenu({ user, wishlistCount }: { user: SafeUser | null; wi
                   key={l.href}
                   href={l.href}
                   role="menuitem"
-                  className="flex items-center justify-between px-4 py-2.5 text-sm text-charcoal transition-colors hover:bg-paper hover:text-ink"
+                  className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm text-charcoal transition-colors duration-300 hover:bg-paper hover:text-ink"
                 >
                   {l.label}
+                  {l.href === "/compte/favoris" && wishlistCount > 0 && (
+                    <span className="flex h-[18px] min-w-[18px] items-center justify-center rounded-pill bg-vert px-1.5 text-[10px] font-semibold tabular-nums text-cream">
+                      {wishlistCount}
+                    </span>
+                  )}
                 </Link>
               ))}
-              {!isStaff && wishlistCount > 0 && (
-                <span className="pointer-events-none absolute right-4 top-[94px] flex h-4 min-w-4 items-center justify-center bg-champagne px-1 text-[9px] font-bold tabular-nums text-ink" />
-              )}
             </nav>
             {isStaff && (
               <Link
                 href="/compte"
-                className="block border-t border-stone px-4 py-2.5 text-[11px] font-semibold tracking-[0.02em] text-muted transition-colors hover:bg-paper hover:text-charcoal"
+                className="block border-t border-stone px-4 py-2.5 text-micro font-semibold tracking-[0.08em] text-muted transition-colors hover:bg-paper hover:text-charcoal"
               >
                 Espace client
               </Link>

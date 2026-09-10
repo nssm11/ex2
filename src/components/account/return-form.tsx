@@ -22,14 +22,14 @@ export function ReturnForm({ orderId, items }: { orderId: number; items: { id: n
       <div className="border border-stone bg-cream p-5">
         <p className="font-display text-lg italic text-ink">Demande envoyée</p>
         <p className="mt-2 text-sm text-muted">{state.message}</p>
-        <p className="mt-3 text-xs font-bold tracking-[0.02em] text-champagne-2">Référence : {state.data?.number}</p>
+        <p className="mt-3 text-xs font-bold tracking-[0.02em] text-vert">Référence : {state.data?.number}</p>
       </div>
     );
   }
 
   return (
     <form action={action} className="space-y-4 border border-stone bg-cream p-5">
-      <p className="eyebrow text-champagne-2">Demander un retour</p>
+      <p className="eyebrow text-vert">Demander un retour</p>
       <input type="hidden" name="orderId" value={orderId} />
       <Field label="Article à retourner">
         <select name="orderItemId" required value={selected ?? ""} onChange={(e) => setSelected(Number(e.target.value))} className="field">

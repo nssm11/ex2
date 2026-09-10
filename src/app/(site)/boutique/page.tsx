@@ -20,17 +20,17 @@ export default async function BoutiquePage({ searchParams }: { searchParams: Pro
       <PageIntro
         index="La boutique"
         kicker="Toute la sélection"
-        title={<>La boutique<br className="hidden sm:block" /> <em className="text-champagne-2">Cléopâtre</em></>}
+        title={<>La boutique<br className="hidden sm:block" /> <em className="text-vert">Cléopâtre</em></>}
         intro="Chaque référence est choisie par nos pharmaciens pour sa tolérance, son efficacité et son authenticité. Filtrez par univers, marque, besoin ou prix — la sélection reste humaine."
       />
       <div className="container-lux pt-9">
         <div className="scrollbar-none -mx-1 flex gap-2 overflow-x-auto pb-1 lg:flex-wrap">
           {universes.map((u) => (
-            <Link key={u.id} href={`/univers/${u.slug}`} className="group inline-flex shrink-0 items-center gap-2 border border-stone-2 bg-cream px-4 py-2.5 text-[11px] font-semibold tracking-[0.02em] text-charcoal transition-colors hover:border-ink hover:bg-ink hover:text-paper">
+            <Link key={u.id} href={`/univers/${u.slug}`} className="group inline-flex shrink-0 items-center gap-2 border border-stone-2 bg-cream px-4 py-2.5 text-micro font-semibold tracking-[0.08em] text-charcoal transition-colors hover:border-vert hover:bg-vert hover:text-cream">
               {u.name} <ArrowRightIcon size={11} className="opacity-0 transition-opacity group-hover:opacity-100" />
             </Link>
           ))}
-          <Link href="/promotions" className="group inline-flex shrink-0 items-center gap-2 bg-champagne-soft px-4 py-2.5 text-[11px] font-bold tracking-[0.02em] text-champagne-2 transition-colors hover:bg-ink hover:text-paper">
+          <Link href="/promotions" className="group inline-flex shrink-0 items-center gap-2 bg-botanical px-4 py-2.5 text-micro font-semibold tracking-[0.08em] text-vert transition-colors hover:bg-vert hover:text-cream">
             Offres <ArrowRightIcon size={11} />
           </Link>
         </div>

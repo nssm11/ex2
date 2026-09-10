@@ -32,7 +32,7 @@ export default async function ComptePage() {
         <section className="border border-stone bg-cream">
           <div className="grid gap-6 p-7 sm:grid-cols-[1fr_auto] sm:items-center lg:p-8">
             <div>
-              <p className="eyebrow mb-3 text-champagne-2">En cours</p>
+              <p className="eyebrow mb-3 text-vert">En cours</p>
               <h2 className="font-display text-display-sm text-ink">Commande {next.number}</h2>
               <p className="mt-2 text-sm text-muted">Passée le {formatDate(next.createdAt)} · {next.items.reduce((a, i) => a + i.quantity, 0)} article(s) · {ORDER_STATUS_LABELS[next.status]}</p>
             </div>
@@ -116,14 +116,14 @@ export default async function ComptePage() {
                 <Link href="/boutique" className="mt-5 inline-flex text-sm text-ink underline underline-offset-4">Trouver mes essentiels</Link>
               </div>
             ) : (
-              <ul className="grid grid-cols-4 gap-3">
+              <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4">
                 {wished.map((w) => (
                   <li key={w.id}>
                     <Link href={`/produit/${w.slug}`} className="group block">
                       <div className="relative aspect-square overflow-hidden bg-stone">
                         {w.image && <Image src={w.image} alt="" fill sizes="100px" className="object-cover transition-transform duration-700 group-hover:scale-[1.05]" />}
                       </div>
-                      <p className="mt-2 line-clamp-2 text-[11px] leading-snug text-charcoal">{w.name}</p>
+                      <p className="mt-2 line-clamp-2 text-xs leading-snug text-charcoal">{w.name}</p>
                     </Link>
                   </li>
                 ))}
@@ -141,7 +141,7 @@ export default async function ComptePage() {
                 { h: "/aide", t: "Aide & FAQ", d: "Livraison, retours, produits", i: PhoneIcon },
                 { h: "/boutiques", t: "Nos boutiques", d: "Ezzahra · Hammam-Lif", i: UserIcon },
               ].map((x) => (
-                <li key={x.h}><Link href={x.h} className="group flex items-start gap-4 bg-paper p-5 transition-colors hover:bg-cream"><x.i size={18} className="mt-0.5 shrink-0 text-champagne-2" /><span><span className="block text-sm text-ink">{x.t}</span><span className="mt-0.5 block text-xs text-muted">{x.d}</span></span></Link></li>
+                <li key={x.h}><Link href={x.h} className="group flex items-start gap-4 bg-paper p-5 transition-colors hover:bg-cream"><x.i size={18} className="mt-0.5 shrink-0 text-vert" /><span><span className="block text-sm text-ink">{x.t}</span><span className="mt-0.5 block text-xs text-muted">{x.d}</span></span></Link></li>
               ))}
             </ul>
           </div>

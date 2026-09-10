@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { useCart } from "@/components/cart/cart-provider";
 import { BankIcon, CardIcon, CashIcon, CheckIcon, GiftIcon, StoreIcon, TruckIcon, LockIcon, TagIcon } from "@/components/icons";
-import { Field, Steps } from "@/components/ui/primitives";
+import { Checkbox, Field, Steps } from "@/components/ui/primitives";
 import { useToast } from "@/components/ui/toaster";
 import { formatDT, GIFT_WRAP_FEE, EXPRESS_SHIPPING_FEE, shippingFor, type ShippingMethod } from "@/lib/money";
 import { CITIES, deliveryEstimate, GOVERNORATES } from "@/lib/tunisia";
@@ -80,7 +80,21 @@ export function CheckoutFlow({ user, savedAddresses, stores }: { user: SafeUser 
     else toast({ kind: "error", title: r.error, description: r.fieldErrors ? Object.values(r.fieldErrors)[0] : undefined });
   });
 
-  if (!cart.hydrated) return <div className="skeleton h-64" />;
+  if (!cart.hydrated) {
+    return (
+      <div className="grid gap-12 lg:grid-cols-12" aria-busy="true">
+        <div className="lg:col-span-7">
+          <div className="skeleton h-8 w-2/3" />
+          <div className="mt-10 space-y-5">
+            <div className="skeleton h-12 w-full" />
+            <div className="grid gap-5 sm:grid-cols-2"><div className="skeleton h-12" /><div className="skeleton h-12" /></div>
+            <div className="skeleton h-12 w-full" />
+          </div>
+        </div>
+        <div className="lg:col-span-5"><div className="skeleton h-80 w-full" /></div>
+      </div>
+    );
+  }
 
   const variants = { enter: { opacity: 0, x: reduce ? 0 : 16 }, center: { opacity: 1, x: 0, transition: { duration: 0.55, ease: EASE_LUXE } }, exit: { opacity: 0, x: reduce ? 0 : -12, transition: { duration: 0.25 } } };
 
@@ -104,7 +118,7 @@ export function CheckoutFlow({ user, savedAddresses, stores }: { user: SafeUser 
                   <Field label="Code postal"><input value={addr.postalCode} onChange={(e) => setAddr({ ...addr, postalCode: e.target.value })} inputMode="numeric" className="field" /></Field>
                 </div>
                 {!user && (
-                  <div className="border border-stone bg-cream p-4"><label className="flex min-h-11 items-center gap-3 text-sm"><input type="checkbox" checked={createAccount} onChange={(e) => setCreateAccount(e.target.checked)} className="h-4 w-4 accent-ink" /> Créer un compte pour suivre mes commandes</label>{createAccount && <Field label="Mot de passe" error={errors.accountPassword}><input type="password" value={accountPassword} onChange={(e) => setAccountPassword(e.target.value)} autoComplete="new-password" className="field" /></Field>}</div>
+                  <div className="border border-stone bg-cream p-5"><Checkbox checked={createAccount} onChange={setCreateAccount} label="Créer un compte pour suivre mes commandes" />{createAccount && <Field label="Mot de passe" error={errors.accountPassword}><input type="password" value={accountPassword} onChange={(e) => setAccountPassword(e.target.value)} autoComplete="new-password" className="field" /></Field>}</div>
                 )}
               </motion.section>
             )}
@@ -117,15 +131,20 @@ export function CheckoutFlow({ user, savedAddresses, stores }: { user: SafeUser 
                     { v: "express", l: "Livraison express", d: deliveryEstimate(addr.governorate, "express"), p: EXPRESS_SHIPPING_FEE, i: TruckIcon },
                     { v: "pickup", l: "Retrait en boutique", d: "Retrait sous 2 h en boutique", p: 0, i: StoreIcon },
                   ] as const).map((o) => (
-                    <label key={o.v} className={`flex min-h-16 cursor-pointer items-center gap-4 border p-4 transition-colors ${shipping === o.v ? "border-ink bg-cream" : "border-stone hover:border-sand-2"}`}>
+                    <label key={o.v} className={`group flex min-h-16 cursor-pointer items-center gap-4 border p-4 transition-colors duration-300 ${shipping === o.v ? "border-vert bg-botanical" : "border-stone hover:border-sage"}`}>
                       <input type="radio" name="shipping" value={o.v} checked={shipping === o.v} onChange={() => setShipping(o.v)} className="sr-only" />
-                      <o.i size={20} className="text-champagne-2" /><div className="flex-1"><p className="text-sm text-ink">{o.l}</p><p className="text-xs text-muted">{o.d}</p></div><span className="text-sm tabular-nums text-ink">{o.p === 0 || (promo?.freeShipping && o.v === "standard") ? "Offerte" : formatDT(o.p)}</span>
+                      <span aria-hidden className={`flex size-[17px] shrink-0 items-center justify-center rounded-pill border transition-colors duration-300 ${shipping === o.v ? "border-vert bg-vert" : "border-stone-2 bg-cream group-hover:border-sage"}`}>
+                        <span className={`size-[7px] rounded-pill bg-cream transition-transform duration-300 ${shipping === o.v ? "scale-100" : "scale-0"}`} />
+                      </span>
+                      <o.i size={20} className="shrink-0 text-vert" />
+                      <div className="flex-1"><p className="text-sm font-medium text-ink">{o.l}</p><p className="mt-0.5 text-xs text-muted">{o.d}</p></div>
+                      <span className="shrink-0 text-sm tabular-nums text-ink">{o.p === 0 || (promo?.freeShipping && o.v === "standard") ? "Offerte" : formatDT(o.p)}</span>
                     </label>
                   ))}
                 </div>
                 {shipping === "pickup" && <Field label="Boutique de retrait"><select value={storeId} onChange={(e) => setStoreId(Number(e.target.value))} className="field">{stores.map((s) => <option key={s.id} value={s.id}>{s.name} — {s.address}</option>)}</select></Field>}
-                <div className="border border-stone p-4">
-                  <label className="flex min-h-11 items-center justify-between gap-3 text-sm"><span className="flex items-center gap-2"><GiftIcon size={16} className="text-champagne-2" /> Emballage cadeau (+{formatDT(GIFT_WRAP_FEE)})</span><input type="checkbox" checked={cart.giftWrap} onChange={(e) => cart.setGiftWrap(e.target.checked)} className="h-4 w-4 accent-ink" /></label>
+                <div className="border border-stone p-5">
+                  <div className="flex min-h-11 items-center justify-between gap-3 text-sm"><span className="flex items-center gap-2"><GiftIcon size={16} className="text-vert" /> Emballage cadeau <span className="text-muted">(+{formatDT(GIFT_WRAP_FEE)})</span></span><Checkbox checked={cart.giftWrap} onChange={cart.setGiftWrap} label={<span className="sr-only">Emballage cadeau</span>} /></div>
                   {cart.giftWrap && <textarea value={giftMessage} onChange={(e) => setGiftMessage(e.target.value)} maxLength={300} rows={2} placeholder="Message à joindre (facultatif)" className="field mt-3 text-sm" />}
                 </div>
                 <Field label="Note pour la commande (facultatif)"><textarea value={cart.note} onChange={(e) => cart.setNote(e.target.value)} rows={2} maxLength={500} className="field text-sm" /></Field>
@@ -141,9 +160,14 @@ export function CheckoutFlow({ user, savedAddresses, stores }: { user: SafeUser 
                     { v: "gift_card", l: "Carte cadeau Cléopâtre", d: "Le code vous sera demandé par téléphone", i: GiftIcon, ok: true },
                     { v: "card", l: "Carte bancaire", d: "Bientôt disponible", i: CardIcon, ok: false },
                   ] as const).map((o) => (
-                    <label key={o.v} className={`flex min-h-16 items-center gap-4 border p-4 transition-colors ${!o.ok ? "cursor-not-allowed opacity-50" : payment === o.v ? "cursor-pointer border-ink bg-cream" : "cursor-pointer border-stone hover:border-sand-2"}`}>
+                    <label key={o.v} className={`group flex min-h-16 items-center gap-4 border p-4 transition-colors duration-300 ${!o.ok ? "cursor-not-allowed opacity-50" : payment === o.v ? "cursor-pointer border-vert bg-botanical" : "cursor-pointer border-stone hover:border-sage"}`}>
                       <input type="radio" name="payment" value={o.v} disabled={!o.ok} checked={payment === o.v} onChange={() => setPayment(o.v)} className="sr-only" />
-                      <o.i size={20} className="text-champagne-2" /><div className="flex-1"><p className="text-sm text-ink">{o.l}</p><p className="text-xs text-muted">{o.d}</p></div>{payment === o.v && <CheckIcon size={16} className="text-ink" />}
+                      <span aria-hidden className={`flex size-[17px] shrink-0 items-center justify-center rounded-pill border transition-colors duration-300 ${payment === o.v ? "border-vert bg-vert" : "border-stone-2 bg-cream group-hover:border-sage"}`}>
+                        <span className={`size-[7px] rounded-pill bg-cream transition-transform duration-300 ${payment === o.v ? "scale-100" : "scale-0"}`} />
+                      </span>
+                      <o.i size={20} className="shrink-0 text-vert" />
+                      <div className="flex-1"><p className="text-sm font-medium text-ink">{o.l}</p><p className="mt-0.5 text-xs text-muted">{o.d}</p></div>
+                      {!o.ok && <span className="shrink-0 text-micro font-semibold tracking-[0.08em] text-muted-2">Bientôt</span>}
                     </label>
                   ))}
                 </div>
@@ -155,10 +179,10 @@ export function CheckoutFlow({ user, savedAddresses, stores }: { user: SafeUser 
               <motion.section key="review" variants={variants} initial="enter" animate="center" exit="exit" className="space-y-6">
                 <h2 className="font-display text-display-sm text-ink">Vérifiez votre commande</h2>
                 <div className="grid gap-4 text-sm sm:grid-cols-2">
-                  <div className="border border-stone p-4"><p className="eyebrow mb-2">Livraison</p><p className="text-ink">{addr.fullName}</p><p className="text-charcoal">{addr.line1}{addr.line2 && `, ${addr.line2}`}<br />{addr.city}, {addr.governorate}<br />{addr.phone}</p><p className="mt-2 text-xs text-muted">{shipping === "pickup" ? `Retrait : ${stores.find((s) => s.id === storeId)?.name}` : deliveryEstimate(addr.governorate, shipping)}</p><button onClick={() => setStep(0)} className="mt-2 text-xs text-muted underline">Modifier</button></div>
-                  <div className="border border-stone p-4"><p className="eyebrow mb-2">Paiement</p><p className="text-ink">{{ cod: "Paiement à la livraison", bank_transfer: "Virement bancaire", card: "Carte bancaire", gift_card: "Carte cadeau" }[payment]}</p>{promo && <p className="mt-1 text-success">{promo.code} appliqué</p>}<p className="mt-1 text-charcoal">{email}</p><button onClick={() => setStep(2)} className="mt-2 text-xs text-muted underline">Modifier</button></div>
+                  <div className="border border-stone p-5"><p className="eyebrow mb-2">Livraison</p><p className="text-ink">{addr.fullName}</p><p className="text-charcoal">{addr.line1}{addr.line2 && `, ${addr.line2}`}<br />{addr.city}, {addr.governorate}<br />{addr.phone}</p><p className="mt-2 text-xs text-muted">{shipping === "pickup" ? `Retrait : ${stores.find((s) => s.id === storeId)?.name}` : deliveryEstimate(addr.governorate, shipping)}</p><button onClick={() => setStep(0)} className="mt-2 text-xs text-muted underline">Modifier</button></div>
+                  <div className="border border-stone p-5"><p className="eyebrow mb-2">Paiement</p><p className="text-ink">{{ cod: "Paiement à la livraison", bank_transfer: "Virement bancaire", card: "Carte bancaire", gift_card: "Carte cadeau" }[payment]}</p>{promo && <p className="mt-1 text-success">{promo.code} appliqué</p>}<p className="mt-1 text-charcoal">{email}</p><button onClick={() => setStep(2)} className="mt-2 text-xs text-muted underline">Modifier</button></div>
                 </div>
-                <ul className="divide-y divide-stone border-y border-stone">{cart.lines.map((l) => <li key={l.productId} className="flex items-center gap-4 py-3"><div className="relative h-14 w-12 shrink-0 bg-stone">{l.image && <Image src={l.image} alt="" fill sizes="48px" className="object-cover" />}</div><div className="min-w-0 flex-1"><p className="truncate text-sm text-ink">{l.name}</p><p className="text-xs text-muted">{l.quantity} × {formatDT(l.priceMillimes)}</p></div><span className="text-sm tabular-nums">{formatDT(l.priceMillimes * l.quantity)}</span></li>)}</ul>
+                <ul className="divide-y divide-stone border-y border-stone">{cart.lines.map((l) => <li key={l.productId} className="flex items-center gap-4 py-3"><div className="relative aspect-square w-12 shrink-0 overflow-hidden rounded-sm bg-paper-2">{l.image && <Image src={l.image} alt="" fill sizes="48px" className="object-cover" />}</div><div className="min-w-0 flex-1"><p className="truncate text-sm text-ink">{l.name}</p><p className="text-xs text-muted">{l.quantity} × {formatDT(l.priceMillimes)}</p></div><span className="text-sm tabular-nums">{formatDT(l.priceMillimes * l.quantity)}</span></li>)}</ul>
                 <p className="text-xs text-muted">En confirmant, vous acceptez nos <Link href="/cgv" className="underline">conditions générales de vente</Link>.</p>
               </motion.section>
             )}
@@ -170,15 +194,15 @@ export function CheckoutFlow({ user, savedAddresses, stores }: { user: SafeUser 
         </div>
       </div>
 
-      <aside className="lg:col-span-5"><div className="sticky top-28 border border-stone bg-cream p-6">
-        <h3 className="mb-5 font-display text-xl text-ink">Récapitulatif</h3>
-        <ul className="max-h-64 space-y-3 overflow-y-auto pr-1">{cart.lines.map((l) => <li key={l.productId} className="flex items-center gap-3 text-sm"><div className="relative h-12 w-10 shrink-0 bg-stone">{l.image && <Image src={l.image} alt="" fill sizes="40px" className="object-cover" />}<span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center bg-ink px-1 text-[9px] text-paper">{l.quantity}</span></div><span className="min-w-0 flex-1 truncate text-charcoal">{l.name}</span><span className="tabular-nums text-ink">{formatDT(l.priceMillimes * l.quantity)}</span></li>)}</ul>
-        <dl className="mt-5 space-y-1.5 border-t border-stone pt-4 text-sm">
+      <aside className="lg:col-span-5"><div className="sticky top-28 border border-stone bg-cream p-6 lg:p-7">
+        <h3 className="mb-6 font-display text-2xl text-ink">Récapitulatif</h3>
+        <ul className="max-h-64 space-y-3 overflow-y-auto pr-1">{cart.lines.map((l) => <li key={l.productId} className="flex items-center gap-3 text-sm"><div className="relative aspect-square w-10 shrink-0 overflow-hidden rounded-sm bg-paper-2">{l.image && <Image src={l.image} alt="" fill sizes="40px" className="object-cover" />}<span className="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-pill bg-vert px-1 text-[9px] font-semibold tabular-nums text-cream">{l.quantity}</span></div><span className="min-w-0 flex-1 truncate text-charcoal">{l.name}</span><span className="tabular-nums text-ink">{formatDT(l.priceMillimes * l.quantity)}</span></li>)}</ul>
+        <dl className="mt-5 space-y-2 border-t border-stone pt-4 text-sm">
           <div className="flex justify-between"><dt className="text-muted">Sous-total</dt><dd className="tabular-nums">{formatDT(subtotal)}</dd></div>
           <AnimatePresence>{discount > 0 && <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex justify-between text-success"><dt className="flex items-center gap-1"><TagIcon size={12} /> Remise</dt><dd className="tabular-nums">−{formatDT(discount)}</dd></motion.div>}</AnimatePresence>
           <div className="flex justify-between"><dt className="text-muted">Livraison</dt><dd className="tabular-nums">{shipFee === 0 ? "Offerte" : formatDT(shipFee)}</dd></div>
           {wrap > 0 && <div className="flex justify-between"><dt className="text-muted">Emballage cadeau</dt><dd className="tabular-nums">{formatDT(wrap)}</dd></div>}
-          <div className="flex justify-between border-t border-stone pt-3 text-base text-ink"><dt>Total</dt><motion.dd key={total} initial={reduce ? false : { opacity: 0.4 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="font-medium tabular-nums">{formatDT(total)}</motion.dd></div>
+          <div className="flex justify-between border-t border-stone pt-4 font-display text-xl text-ink"><dt>Total</dt><motion.dd key={total} initial={reduce ? false : { opacity: 0.4 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className="tabular-nums">{formatDT(total)}</motion.dd></div>
         </dl>
         <p className="mt-4 flex items-center gap-2 text-xs text-muted"><LockIcon size={12} /> Données chiffrées · Produits authentiques</p>
       </div></aside>

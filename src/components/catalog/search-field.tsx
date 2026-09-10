@@ -40,7 +40,7 @@ export function SearchField({ autoFocus = false }: { autoFocus?: boolean }) {
       role="search"
       className="flex w-full items-center gap-2 border border-paper/25 bg-paper/5 px-4"
     >
-      <SearchIcon size={18} className="shrink-0 text-champagne-3" />
+      <SearchIcon size={18} className="shrink-0 text-vert-3" />
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -50,10 +50,10 @@ export function SearchField({ autoFocus = false }: { autoFocus?: boolean }) {
         placeholder="Rechercher un produit, une marque, un besoin…"
         aria-label="Rechercher un produit"
         autoComplete="off"
-        className="h-14 min-w-0 flex-1 bg-transparent text-[15px] text-paper placeholder:text-paper/45 focus:outline-none"
+        className="h-14 min-w-0 flex-1 bg-transparent text-[15px] text-cream placeholder:text-cream/45 focus:outline-none"
       />
       {value.length > 0 && (
-        <button type="button" onClick={clear} aria-label="Effacer la recherche" className="flex h-11 w-11 shrink-0 items-center justify-center text-paper/70 transition-colors hover:text-paper">
+        <button type="button" onClick={clear} aria-label="Effacer la recherche" className="flex h-11 w-11 shrink-0 items-center justify-center text-cream/70 transition-colors hover:text-cream">
           <CloseIcon size={16} />
         </button>
       )}

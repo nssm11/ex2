@@ -82,8 +82,8 @@ export default async function ReturnsPage() {
               <p className="mt-2 text-sm text-muted"><span className="font-medium text-charcoal">Motif&nbsp;:</span> {r.reason}</p>
               {r.message && <p className="mt-2 text-sm text-muted italic">&laquo;&nbsp;{r.message}&nbsp;&raquo;</p>}
               {r.staffNote && (
-                <div className="mt-4 border-l-2 border-champagne bg-cream p-4">
-                  <p className="text-[10px] font-bold tracking-[0.02em] text-champagne-2">Réponse de l&apos;équipe</p>
+                <div className="mt-4 border-l-2 border-sage bg-cream p-4">
+                  <p className="text-micro font-semibold tracking-[0.08em] text-vert">Réponse de l&apos;équipe</p>
                   <p className="mt-2 text-sm text-charcoal">{r.staffNote}</p>
                 </div>
               )}

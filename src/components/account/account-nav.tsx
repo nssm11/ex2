@@ -25,13 +25,13 @@ export function AccountNav() {
                 aria-current={active ? "page" : undefined}
                 className={cn(
                   "group relative flex min-h-12 items-center gap-4 px-4 transition-colors duration-300 lg:min-h-[4.5rem] lg:border-b lg:border-stone lg:px-5",
-                  active ? "bg-ink text-paper" : "text-charcoal hover:bg-cream hover:text-ink",
+                  active ? "bg-vert text-cream" : "text-charcoal hover:bg-cream hover:text-ink",
                 )}
               >
-                <span className={cn("hidden font-display text-sm italic lg:block", active ? "text-champagne-3" : "text-muted-2")}>{it.n}</span>
+                <span className={cn("hidden font-display text-sm italic lg:block", active ? "text-sage-3" : "text-muted-2")}>{it.n}</span>
                 <span className="flex min-w-0 flex-col">
                   <span className="text-[14px] font-medium">{it.l}</span>
-                  <span className={cn("mt-0.5 hidden truncate text-[11px] lg:block", active ? "text-paper/60" : "text-muted-2")}>{it.d}</span>
+                  <span className={cn("mt-0.5 hidden truncate text-[11px] lg:block", active ? "text-cream/60" : "text-muted-2")}>{it.d}</span>
                 </span>
                 <ChevronRightIcon size={13} className={cn("ml-auto shrink-0 transition-transform duration-300 lg:hidden", active && "rotate-90")} />
               </Link>
@@ -40,7 +40,7 @@ export function AccountNav() {
         })}
       </ul>
       <div className="mt-6 hidden border border-stone bg-cream p-5 lg:block">
-        <p className="eyebrow text-champagne-2">Besoin d&apos;aide ?</p>
+        <p className="eyebrow text-vert">Besoin d&apos;aide ?</p>
         <p className="mt-2 text-xs leading-relaxed text-muted">Nos pharmaciens répondent du lundi au samedi, 8h30–20h30.</p>
         <a href="tel:+21671450210" className="mt-4 inline-flex min-h-10 items-center text-sm font-medium text-ink underline-offset-4 hover:underline">71 450 210</a>
       </div>

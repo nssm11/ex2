@@ -18,7 +18,7 @@ export default async function JournalPage() {
       <PageIntro
         index="Le Journal"
         kicker="Éditorial Cléopâtre"
-        title={<>Comprendre, <em className="text-champagne-2">avant d&apos;acheter</em></>}
+        title={<>Comprendre, <em className="text-vert">avant d&apos;acheter</em></>}
         intro="Des articles courts, écrits par notre équipe pharmaceutique : comment choisir, doser, appliquer — sans jargon et sans promesses excessives."
       />
 
@@ -31,8 +31,8 @@ export default async function JournalPage() {
                 {lead.image && <Image src={lead.image} alt="" fill priority sizes="(max-width:1024px) 100vw, 58vw" className="object-cover transition-transform duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]" />}
               </div>
               <div className="lg:col-span-5 lg:pl-6">
-                <p className="text-[10px] font-bold tracking-[0.02em] text-muted">{lead.tag} · {lead.readMinutes} min · {formatDate(lead.publishedAt)}</p>
-                <h2 className="mt-4 font-display text-display-md text-ink transition-colors duration-500 group-hover:text-champagne-2 sm:text-display-lg">{lead.title}</h2>
+                <p className="text-micro font-semibold tracking-[0.08em] text-muted">{lead.tag} · {lead.readMinutes} min · {formatDate(lead.publishedAt)}</p>
+                <h2 className="mt-4 font-display text-display-md text-ink transition-colors duration-500 group-hover:text-vert sm:text-display-lg">{lead.title}</h2>
                 <p className="mt-4 line-clamp-3 max-w-md text-[15px] leading-relaxed text-muted">{lead.excerpt}</p>
                 <span className="btn-ghost mt-8">Lire l&apos;article <ArrowRightIcon size={14} /></span>
               </div>
@@ -49,10 +49,10 @@ export default async function JournalPage() {
             <Link key={a.id} href={`/journal/${a.slug}`} className="group flex flex-col">
               <div className="relative aspect-[4/3] overflow-hidden bg-stone">
                 {a.image && <Image src={a.image} alt="" fill sizes="(max-width:768px) 100vw, 33vw" className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]" />}
-                <span className="absolute left-4 top-4 bg-paper/95 px-2 py-1 font-display text-sm italic text-champagne-2">{String(i + 2).padStart(2, "0")}</span>
+                <span className="absolute left-4 top-4 bg-paper/95 px-2 py-1 font-display text-sm italic text-vert">{String(i + 2).padStart(2, "0")}</span>
               </div>
-              <p className="mt-5 text-[9px] font-bold tracking-[0.02em] text-muted">{a.tag} · {a.readMinutes} min · {formatDate(a.publishedAt)}</p>
-              <h2 className="mt-2 font-display text-display-sm text-ink transition-colors duration-500 group-hover:text-champagne-2">{a.title}</h2>
+              <p className="mt-5 text-micro font-semibold tracking-[0.08em] text-muted">{a.tag} · {a.readMinutes} min · {formatDate(a.publishedAt)}</p>
+              <h2 className="mt-2 font-display text-display-sm text-ink transition-colors duration-500 group-hover:text-vert">{a.title}</h2>
               <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-muted">{a.excerpt}</p>
             </Link>
           ))}

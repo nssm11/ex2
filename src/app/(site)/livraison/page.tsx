@@ -16,7 +16,7 @@ export default function LivraisonPage() {
       <div className="mt-8">
         <PageHeader eyebrow="Livraison & retours" title="Simple, rapide, partout en Tunisie" />
       </div>
-      <div className="grid gap-px bg-stone sm:grid-cols-2">{rows.map((r) => <div key={r.t} className="bg-paper p-8"><span className="text-champagne-2">{r.i}</span><h2 className="mt-5 text-[15px] text-ink">{r.t}</h2><p className="mt-2 text-sm leading-relaxed text-muted">{r.d}</p></div>)}</div>
+      <div className="grid gap-px bg-stone sm:grid-cols-2">{rows.map((r) => <div key={r.t} className="bg-paper p-8"><span className="text-vert">{r.i}</span><h2 className="mt-5 text-[15px] text-ink">{r.t}</h2><p className="mt-2 text-sm leading-relaxed text-muted">{r.d}</p></div>)}</div>
     </div>
   );
 }

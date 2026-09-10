@@ -8,7 +8,7 @@ export default async function ConnexionPage({ searchParams }: { searchParams: Pr
   const { next } = await searchParams;
   if (await getCurrentUser()) redirect(next && next.startsWith("/") ? next : "/compte");
   return (
-    <AuthShell kicker="Retrouver votre espace" title={<>Bon retour <em className="text-champagne-2">parmi nous</em></>}>
+    <AuthShell kicker="Retrouver votre espace" title={<>Bon retour <em className="text-vert">parmi nous</em></>}>
       <LoginForm next={next} />
     </AuthShell>
   );
