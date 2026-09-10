@@ -7,6 +7,7 @@ import { getNavigationData } from "@/lib/navigation";
 import { Header } from "@/components/shell/header";
 import { Footer } from "@/components/shell/footer";
 import { CartDrawer } from "@/components/shell/cart-drawer";
+import { CartSync } from "@/components/cart/cart-sync";
 
 export default async function SiteLayout({ children }: { children: ReactNode }) {
   const [{ groups, universes }, user, storeRows] = await Promise.all([
@@ -33,6 +34,8 @@ export default async function SiteLayout({ children }: { children: ReactNode }) 
       <main id="contenu" className="flex-1">{children}</main>
       <Footer universes={universes.map((u) => ({ slug: u.slug, name: u.name }))} stores={storeRows} />
       <CartDrawer />
+      {/* Miroir serveur du panier — relance de panier abandonné (clients connectés uniquement). */}
+      <CartSync enabled={!!user} />
     </div>
   );
 }

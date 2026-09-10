@@ -27,6 +27,8 @@ import { reservePromoUsage } from "@/lib/promotions";
 import { rateLimit } from "@/lib/rate-limit";
 import { checkoutSchema } from "@/lib/validation";
 import { MAX_CART_QTY } from "@/lib/cart";
+import { markCartConverted } from "@/lib/abandoned-cart";
+import { sendOrderConfirmationEmail } from "@/lib/email";
 import { log } from "@/lib/logger";
 
 /**
@@ -147,6 +149,20 @@ export async function placeOrderAction(input: unknown): Promise<ActionResult<{ n
       await track("order.placed", { number: result.order.number, total: result.order.totalMillimes }, result.userId);
       log.info("order.placed", { number: result.order.number });
       revalidatePath("/admin");
+    }
+
+    // Reçu par e-mail. Tout se passe après le `commit` : l'envoi ne peut donc
+    // ni annuler la commande, ni la retarder s'il échoue.
+    if (result.userId) await markCartConverted(result.userId);
+    if (!result.duplicate) {
+      // On relit la commande avec ses articles : ce sont les valeurs réellement
+      // facturées, pas l'état du panier navigateur.
+      const full = await db.query.orders.findFirst({ where: eq(orders.id, result.order.id), with: { items: true } });
+      if (full) {
+        await sendOrderConfirmationEmail({ order: full, customerName: result.order.shippingAddress.fullName });
+      } else {
+        log.warn("email.order.missing", { number: result.order.number });
+      }
     }
     return ok(
       { number: result.order.number, accessKey: result.order.accessKey ?? "" },

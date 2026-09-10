@@ -20,6 +20,7 @@ import { rateLimit } from "@/lib/rate-limit";
 import { clientKey } from "@/lib/origin";
 import { cartLineSchema, newsletterSchema, returnRequestSchema, reviewSchema, ticketSchema } from "@/lib/validation";
 import { track } from "@/lib/orders";
+import { sendSupportConfirmationEmail, ticketReference } from "@/lib/email";
 
 function generateReturnNumber(): string {
   const d = new Date();
@@ -88,12 +89,31 @@ export async function createTicketAction(_prev: ActionResult | null, form: FormD
     priority: form.get("priority") || "normal",
   });
   if (!parsed.success) return fail(MESSAGES.invalid, zodFieldErrors(parsed.error.issues));
-  await db.insert(supportTickets).values({
-    ...parsed.data,
-    orderNumber: parsed.data.orderNumber || null,
-    userId: me?.id ?? null,
-    email: parsed.data.email.toLowerCase(),
-  });
+  const [ticket] = await db
+    .insert(supportTickets)
+    .values({
+      ...parsed.data,
+      orderNumber: parsed.data.orderNumber || null,
+      userId: me?.id ?? null,
+      email: parsed.data.email.toLowerCase(),
+    })
+    .returning({ id: supportTickets.id, createdAt: supportTickets.createdAt });
+
+  // Accusé de réception. Action secondaire : en cas d'échec, la demande reste
+  // enregistrée et le client voit tout de même la confirmation à l'écran.
+  if (ticket) {
+    await sendSupportConfirmationEmail({
+      reference: ticketReference(ticket.id),
+      name: parsed.data.name,
+      email: parsed.data.email.toLowerCase(),
+      subject: parsed.data.subject,
+      message: parsed.data.message,
+      type: parsed.data.type,
+      orderNumber: parsed.data.orderNumber || null,
+      createdAt: ticket.createdAt,
+    });
+  }
+
   return ok(undefined, "Message envoyé. Nous répondons sous 24 h ouvrées.");
 }
 

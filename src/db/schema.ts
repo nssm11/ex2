@@ -388,6 +388,42 @@ export const wishlistItems = pgTable(
   (t) => [primaryKey({ columns: [t.userId, t.productId] })],
 );
 
+/**
+ * Miroir serveur du panier des clients connectés.
+ *
+ * Le panier vit côté navigateur (`localStorage`, voir `cart-provider.tsx`) ; le
+ * serveur n'en sait donc rien tant que la commande n'est pas passée. Cette
+ * table est le minimum nécessaire pour la relance de panier abandonné : le
+ * navigateur y pousse la liste des `productId`/`quantity` à chaque changement.
+ *
+ * Deux choix délibérés :
+ *  • on ne stocke **que** `productId` et `quantity`. Les libellés, images et
+ *    prix sont relus depuis `products` au moment de l'envoi : le courriel ne
+ *    peut ainsi contenir aucun contenu fourni par le client, et annonce
+ *    toujours le tarif en vigueur ;
+ *  • `updatedAt` est la dernière mutation connue. C'est lui qui sert
+ *    d'horodatage d'abandon, et `remindedAt` garantit qu'une même relance
+ *    n'est jamais envoyée deux fois pour le même abandon.
+ */
+export type CartLineRef = { productId: number; quantity: number };
+
+export const carts = pgTable(
+  "carts",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    lines: jsonb("lines").$type<CartLineRef[]>().notNull().default([]),
+    /** Dernière mutation du panier — point de départ du délai d'abandon. */
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+    /** Dernière relance envoyée. `null` = jamais relancé. */
+    remindedAt: timestamp("reminded_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [uniqueIndex("carts_user_idx").on(t.userId), index("carts_updated_idx").on(t.updatedAt)],
+);
+
 // Content
 export const articles = pgTable(
   "articles",

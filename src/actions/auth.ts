@@ -9,6 +9,7 @@ import { createSession, destroySession, getCurrentUser, hashPassword, SESSION_CO
 import { fail, MESSAGES, ok, zodFieldErrors, type ActionResult } from "@/lib/api";
 import { clientKey, checkOrigin } from "@/lib/origin";
 import { rateLimit } from "@/lib/rate-limit";
+import { sendWelcomeEmail } from "@/lib/email";
 import { addressSchema, loginSchema, passwordChangeSchema, profileSchema, registerSchema } from "@/lib/validation";
 import { audit } from "@/lib/orders";
 
@@ -34,6 +35,11 @@ export async function registerAction(_prev: ActionResult | null, form: FormData)
   if (exists) return fail("Un compte existe déjà avec cet e-mail.", { email: "E-mail déjà utilisé" });
   const [u] = await db.insert(users).values({ ...parsed.data, phone: parsed.data.phone || null, passwordHash: await hashPassword(parsed.data.password) }).returning();
   await createSession(u.id, (await headers()).get("user-agent"));
+  // E-mail de bienvenue : action secondaire. `sendWelcomeEmail` isole ses
+  // erreurs, donc un incident Resend ne peut pas faire échouer l'inscription.
+  // On l'attend malgré tout — sans `await`, un environnement serverless
+  // pourrait geler l'exécution avant que l'appel à Resend aboutisse.
+  await sendWelcomeEmail({ email: u.email, firstName: u.firstName, lastName: u.lastName });
   redirect("/compte");
 }
 

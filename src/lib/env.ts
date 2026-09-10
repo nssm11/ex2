@@ -24,6 +24,22 @@ const schema = z.object({
     .default("false")
     .transform((v) => v === "true"),
   TRUST_PROXY_HOPS: z.coerce.number().int().min(1).max(10).default(1),
+
+  // ── E-mail transactionnel (Resend) ─────────────────────────────
+  // Server-side only. Never prefix these with NEXT_PUBLIC_: the API key must
+  // never reach a browser bundle. Absent key ⇒ e-mail is disabled and every
+  // send is skipped (the caller's business operation still succeeds).
+  RESEND_API_KEY: z.string().min(1).optional(),
+  EMAIL_FROM: z.string().min(1).default("Cléopâtre — Espace Santé Beauté <onboarding@resend.dev>"),
+  EMAIL_REPLY_TO: z
+    .string()
+    .optional()
+    .transform((v) => (v && v.trim() ? v.trim() : undefined)),
+  // Shared secret guarding the scheduled-job endpoint.
+  CRON_SECRET: z.string().min(1).optional(),
+  // Grace period before an untouched cart counts as abandoned. 60 s here so
+  // the reminder is testable; raise it (e.g. 3600) in production.
+  ABANDONED_CART_DELAY_SECONDS: z.coerce.number().int().min(30).max(604_800).default(60),
 });
 
 const parsed = schema.parse({
@@ -33,6 +49,11 @@ const parsed = schema.parse({
   NODE_ENV: process.env.NODE_ENV,
   TRUST_PROXY: process.env.TRUST_PROXY,
   TRUST_PROXY_HOPS: process.env.TRUST_PROXY_HOPS,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  EMAIL_FROM: process.env.EMAIL_FROM,
+  EMAIL_REPLY_TO: process.env.EMAIL_REPLY_TO,
+  CRON_SECRET: process.env.CRON_SECRET,
+  ABANDONED_CART_DELAY_SECONDS: process.env.ABANDONED_CART_DELAY_SECONDS,
 });
 
 const isProduction = parsed.NODE_ENV === "production";
