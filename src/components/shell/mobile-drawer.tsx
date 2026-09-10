@@ -60,14 +60,14 @@ export function MobileDrawer({
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", stiffness: 210, damping: 32 }}
-            className="fixed inset-y-0 left-0 z-[60] flex w-[88vw] max-w-sm flex-col bg-paper shadow-drawer lg:hidden"
+            className="fixed inset-y-0 left-0 z-[60] flex w-[88vw] max-w-sm flex-col border-r border-line bg-bg shadow-drawer lg:hidden"
           >
-            <div className="flex h-16 shrink-0 items-center justify-between border-b border-stone px-5">
-              <span className="font-display text-xl text-ink">Cléopâtre</span>
+            <div className="flex h-16 shrink-0 items-center justify-between border-b border-line px-5">
+              <span className="font-display text-xl tracking-[-0.015em] text-text">Cléopâtre</span>
               <button
                 onClick={onClose}
                 aria-label="Fermer le menu"
-                className="flex h-11 w-11 items-center justify-center text-ink transition-colors hover:text-champagne-2"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-line bg-surface text-text transition-colors hover:bg-surface-2"
               >
                 <CloseIcon />
               </button>
@@ -75,9 +75,9 @@ export function MobileDrawer({
 
             <button
               onClick={() => { onClose(); onSearch(); }}
-              className="mx-5 mt-4 flex h-12 shrink-0 items-center gap-3 border border-stone bg-cream/60 px-4 text-left text-sm text-muted transition-colors hover:border-champagne-2"
+              className="mx-5 mt-4 flex h-11 shrink-0 items-center gap-3 rounded-full border border-line bg-surface px-4 text-left text-sm text-text-muted transition-colors hover:border-line-strong hover:bg-surface-2"
             >
-              <SearchIcon size={16} /> Rechercher un produit, une marque…
+              <SearchIcon size={16} /> Rechercher un soin…
             </button>
 
             <div className="flex-1 overflow-y-auto px-5 py-5">
@@ -186,7 +186,7 @@ export function MobileDrawer({
               </div>
             </div>
 
-            <div className="shrink-0 border-t border-stone px-5 py-4 text-[10px] uppercase tracking-[0.2em] text-muted">
+            <div className="shrink-0 border-t border-line bg-bg-soft px-5 py-4 text-[10px] uppercase tracking-[0.14em] text-text-muted">
               <div className="flex items-center justify-between">
                 <span>Conseil 71 450 210</span>
                 <span>Livraison 24–72 h</span>

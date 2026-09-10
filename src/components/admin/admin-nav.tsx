@@ -1,7 +1,21 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookIcon, BoxesIcon, ChartIcon, ChatIcon, HomeIcon, ListIcon, PackageIcon, SearchIcon, StarIcon, StoreIcon, TagIcon, UsersIcon, ChevronRightIcon } from "@/components/icons";
+import {
+  BookIcon,
+  BoxesIcon,
+  ChartIcon,
+  ChatIcon,
+  HomeIcon,
+  ListIcon,
+  PackageIcon,
+  SearchIcon,
+  StarIcon,
+  StoreIcon,
+  TagIcon,
+  UsersIcon,
+  ChevronRightIcon,
+} from "@/components/icons";
 import { cn } from "@/lib/utils";
 
 type Item = { href: string; l: string; i: typeof HomeIcon; admin?: boolean };
@@ -51,28 +65,42 @@ export function AdminNav({ role }: { role: string }) {
       {/* mobile horizontal */}
       <div className="lg:hidden">
         <ul className="no-scrollbar-x flex gap-1.5 overflow-x-auto pb-1">
-          {groups.flatMap((g) => g.items).filter((i) => !i.admin || role === "admin").map((it) => {
-            const active = isActive(it.href);
-            return (
-              <li key={it.href} className="shrink-0">
-                <Link href={it.href} aria-current={active ? "page" : undefined} className={cn("flex min-h-10 items-center gap-2 border px-3 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors",
-                  active ? "border-admin-gold bg-admin-gold text-noir" : "border-admin-border text-admin-muted hover:text-admin-text")}>
-                  <it.i size={13} />{it.l}
-                </Link>
-              </li>
-            );
-          })}
+          {groups
+            .flatMap((g) => g.items)
+            .filter((i) => !i.admin || role === "admin")
+            .map((it) => {
+              const active = isActive(it.href);
+              return (
+                <li key={it.href} className="shrink-0">
+                  <Link
+                    href={it.href}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "flex min-h-10 items-center gap-2 rounded-full border px-3.5 text-[11px] font-semibold uppercase tracking-[0.1em] transition-colors",
+                      active
+                        ? "border-admin-gold bg-admin-gold text-admin-bg shadow-[0_4px_12px_rgba(196,164,132,0.25)]"
+                        : "border-admin-border bg-admin-bg text-admin-muted hover:border-admin-gold/20 hover:text-admin-text",
+                    )}
+                  >
+                    <it.i size={13} />
+                    {it.l}
+                  </Link>
+                </li>
+              );
+            })}
         </ul>
       </div>
-      {/* desktop rail */}
-      <div className="hidden space-y-7 lg:block">
+      {/* desktop rail — rounded pills, copper active */}
+      <div className="hidden space-y-6 lg:block">
         {groups.map((g) => {
           const items = g.items.filter((i) => !i.admin || role === "admin");
           if (!items.length) return null;
           return (
             <div key={g.label}>
-              <p className="mb-2 px-3 text-[9px] font-bold uppercase tracking-[0.26em] text-admin-muted/70">{g.label}</p>
-              <ul className="space-y-0.5">
+              <p className="mb-2 px-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-admin-dim">
+                {g.label}
+              </p>
+              <ul className="space-y-1">
                 {items.map((it) => {
                   const active = isActive(it.href);
                   return (
@@ -80,13 +108,16 @@ export function AdminNav({ role }: { role: string }) {
                       <Link
                         href={it.href}
                         aria-current={active ? "page" : undefined}
-                        className={cn("group relative flex min-h-11 items-center gap-3 px-3 text-[13px] transition-colors duration-200",
-                          active ? "bg-admin-gold/10 text-admin-text" : "text-admin-muted hover:bg-admin-panel hover:text-admin-text")}
+                        className={cn(
+                          "group flex min-h-10 items-center gap-3 rounded-full px-3.5 text-[13px] font-[450] transition-all duration-200",
+                          active
+                            ? "bg-admin-gold text-admin-bg shadow-[0_4px_12px_rgba(196,164,132,0.22)]"
+                            : "text-admin-muted hover:bg-admin-panel-2 hover:text-admin-text",
+                        )}
                       >
-                        <span aria-hidden className={cn("absolute inset-y-2 left-0 w-0.5 transition-colors", active ? "bg-admin-gold" : "bg-transparent group-hover:bg-admin-border")} />
-                        <it.i size={15} className={cn(active ? "text-admin-gold" : "text-admin-muted")} />
+                        <it.i size={15} className={cn(active ? "text-admin-bg" : "text-admin-dim group-hover:text-admin-muted")} />
                         {it.l}
-                        {active && <ChevronRightIcon size={12} className="ml-auto text-admin-gold" />}
+                        {active && <ChevronRightIcon size={12} className="ml-auto text-admin-bg" />}
                       </Link>
                     </li>
                   );
