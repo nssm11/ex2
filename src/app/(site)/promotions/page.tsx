@@ -30,7 +30,7 @@ export default async function PromotionsPage({ searchParams }: { searchParams: P
                     <p className="font-display text-lg tracking-[0.04em] text-paper"><code>{p.code}</code></p>
                     <p className="text-xs text-paper/60">{p.label}</p>
                   </div>
-                  <span className="text-right text-[9px] font-bold uppercase leading-relaxed tracking-[0.14em] text-paper/45">{p.minSubtotalMillimes > 0 && <>dès {formatDTShort(p.minSubtotalMillimes)}<br /></>}{p.endsAt ? <>jusqu&apos;au {new Intl.DateTimeFormat("fr-TN", { day: "numeric", month: "long" }).format(p.endsAt)}</> : "permanent"}</span>
+                  <span className="text-right text-[9px] font-bold leading-relaxed tracking-[0.02em] text-paper/45">{p.minSubtotalMillimes > 0 && <>dès {formatDTShort(p.minSubtotalMillimes)}<br /></>}{p.endsAt ? <>jusqu&apos;au {new Intl.DateTimeFormat("fr-TN", { day: "numeric", month: "long" }).format(p.endsAt)}</> : "permanent"}</span>
                 </li>
               ))}
             </ul>
@@ -47,7 +47,7 @@ export default async function PromotionsPage({ searchParams }: { searchParams: P
           ].map((s) => (
             <div key={s.n} className="bg-cream px-8 py-9">
               <p className="font-display text-2xl italic text-champagne-2">{s.n}</p>
-              <p className="mt-3 flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.16em] text-ink"><TagIcon size={13} /> {s.t}</p>
+              <p className="mt-3 flex items-center gap-2 text-[12px] font-bold tracking-[0.02em] text-ink"><TagIcon size={13} /> {s.t}</p>
               <p className="mt-2 text-sm leading-relaxed text-muted">{s.d}</p>
             </div>
           ))}

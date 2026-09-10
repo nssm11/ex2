@@ -48,7 +48,7 @@ export default async function HomePage() {
                 <div key={x.d} className="px-2">
                   <dt className="sr-only">{x.d}</dt>
                   <dd className="font-display text-display-sm italic text-ink">{x.t}</dd>
-                  <dd className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-muted">{x.d}</dd>
+                  <dd className="mt-1 text-[9px] font-bold tracking-[0.02em] text-muted">{x.d}</dd>
                 </div>
               ))}
             </dl>
@@ -59,7 +59,7 @@ export default async function HomePage() {
               <Image src="/images/hero.jpg" alt="Nature morte éditoriale — soins Cléopâtre" fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
             </div>
             <Reveal delay={0.9} y={12} className="absolute -bottom-6 left-4 right-4 border border-stone bg-cream/95 p-5 shadow-soft backdrop-blur sm:left-auto sm:right-6 sm:w-72">
-              <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-champagne-2"><ChatIcon size={13} /> Conseil pharmaceutique</p>
+              <p className="flex items-center gap-2 text-[10px] font-bold tracking-[0.02em] text-champagne-2"><ChatIcon size={13} /> Conseil pharmaceutique</p>
               <p className="mt-2 text-sm leading-relaxed text-charcoal">Une question sur un actif ou une routine ? Nos pharmaciens vous répondent, en boutique comme au 71 450 210.</p>
             </Reveal>
           </div>
@@ -72,12 +72,12 @@ export default async function HomePage() {
           {[
             { i: ShieldIcon, t: "Authenticité garantie", d: "Approvisionnement direct auprès des laboratoires et distributeurs officiels." },
             { i: TruckIcon, t: "Livraison 24–72 h", d: "Partout en Tunisie. Offerte dès 99 DT, paiement à la livraison." },
-            { i: StoreIcon, t: "Click & collect 2 h", d: "Commandez en ligne, retirez en boutique à Ezzahra ou Hammam-Lif." },
+            { i: StoreIcon, t: "Retrait en boutique en 2 h", d: "Commandez en ligne, retirez en boutique à Ezzahra ou Hammam-Lif." },
             { i: CashIcon, t: "Prix justes", d: "Nos offres portent sur des références réelles, jamais de fausses remises." },
           ].map((x) => (
             <div key={x.t} className="bg-cream px-6 py-8 lg:px-8">
               <x.i size={20} className="text-champagne-2" />
-              <p className="mt-5 text-[11px] font-bold uppercase tracking-[0.16em] text-ink">{x.t}</p>
+              <p className="mt-5 text-[11px] font-bold tracking-[0.02em] text-ink">{x.t}</p>
               <p className="mt-2 text-xs leading-relaxed text-muted">{x.d}</p>
             </div>
           ))}
@@ -105,7 +105,7 @@ export default async function HomePage() {
                 <div className="lg:col-span-6">
                   <h2 className="font-display text-display-md text-ink transition-colors duration-500 group-hover:text-champagne-2 lg:text-display-sm xl:text-display-md">{u.name}</h2>
                   <p className="mt-2 line-clamp-2 max-w-xl text-sm leading-relaxed text-muted">{u.story}</p>
-                  <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-2">{u.children.length} catégories</p>
+                  <p className="mt-3 text-[10px] font-bold tracking-[0.02em] text-muted-2">{u.children.length} catégories</p>
                 </div>
                 <span className="hidden justify-end pr-2 text-ink transition-transform duration-500 group-hover:translate-x-2 lg:col-span-1 lg:flex"><ArrowRightIcon size={20} /></span>
               </Link>
@@ -135,10 +135,10 @@ export default async function HomePage() {
                   <li key={p.id}>
                     <Link href="/promotions" className="group flex items-baseline justify-between gap-4 py-4">
                       <span className="flex items-baseline gap-4">
-                        <code className="font-display text-xl tracking-[0.06em] text-champagne-3">{p.code}</code>
+                        <code className="font-display text-xl tracking-[0.02em] text-champagne-3">{p.code}</code>
                         <span className="hidden text-xs text-paper/60 sm:inline">{p.label}</span>
                       </span>
-                      {p.minSubtotalMillimes > 0 && <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.16em] text-paper/45">dès {formatDTShort(p.minSubtotalMillimes)}</span>}
+                      {p.minSubtotalMillimes > 0 && <span className="shrink-0 text-[10px] font-bold tracking-[0.02em] text-paper/45">dès {formatDTShort(p.minSubtotalMillimes)}</span>}
                     </Link>
                   </li>
                 ))}
@@ -152,10 +152,10 @@ export default async function HomePage() {
                   <Link href={`/produit/${p.slug}`} className="group block">
                     <div className={`frame relative ${i === 0 ? "aspect-square lg:aspect-[4/5]" : "aspect-[4/5]"}`}>
                       {p.image && <Image src={p.image} alt={p.name} fill sizes="(max-width:768px) 100vw, 20vw" className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]" />}
-                      <span className="absolute left-3 top-3 bg-champagne px-2 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-ink">Offre</span>
+                      <span className="absolute left-3 top-3 bg-champagne px-2 py-1 text-[9px] font-bold tracking-[0.02em] text-ink">Offre</span>
                     </div>
                     <div className="mt-4">
-                      <p className="text-[10px] uppercase tracking-[0.18em] text-paper/45">{p.brandName}</p>
+                      <p className="text-[10px] tracking-[0.02em] text-paper/45">{p.brandName}</p>
                       <p className="mt-1 line-clamp-2 text-sm leading-snug text-paper/90">{p.name}</p>
                       <p className="mt-1.5 text-sm text-paper/70"><span className="text-paper">{formatDTShort(p.priceMillimes)}</span>{p.compareAtMillimes && <span className="ml-2 text-xs line-through opacity-60">{formatDTShort(p.compareAtMillimes)}</span>}</p>
                     </div>
@@ -241,7 +241,7 @@ export default async function HomePage() {
                   <div className="frame relative aspect-[16/10]">
                     {lead.image && <Image src={lead.image} alt="" fill sizes="(max-width:1024px) 100vw, 58vw" className="object-cover transition-transform duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]" />}
                   </div>
-                  <div className="mt-6 flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
+                  <div className="mt-6 flex items-center gap-4 text-[10px] font-bold tracking-[0.02em] text-muted">
                     <span className="border-b border-champagne pb-0.5 text-champagne-2">{lead.tag}</span><span>{lead.readMinutes} min</span><span>{formatDate(lead.publishedAt)}</span>
                   </div>
                   <h2 className="mt-3 font-display text-display-md text-ink transition-colors group-hover:text-champagne-2">{lead.title}</h2>
@@ -257,7 +257,7 @@ export default async function HomePage() {
                       {a.image && <Image src={a.image} alt="" fill sizes="120px" className="object-cover transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]" />}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted">{a.tag} · {a.readMinutes} min</p>
+                      <p className="text-[9px] font-bold tracking-[0.02em] text-muted">{a.tag} · {a.readMinutes} min</p>
                       <h3 className="mt-2 font-display text-display-sm text-ink transition-colors group-hover:text-champagne-2">{a.title}</h3>
                       <p className="mt-2 line-clamp-2 text-sm text-muted">{a.excerpt}</p>
                     </div>
@@ -277,7 +277,7 @@ export default async function HomePage() {
               <Image src="/images/maison.jpg" alt="La maison Cléopâtre — parapharmacie Ezzahra" fill sizes="(max-width:1024px) 100vw, 50vw" className="object-cover" />
             </div>
             <div className="absolute -bottom-5 left-5 hidden border border-stone bg-paper px-5 py-4 shadow-soft sm:block">
-              <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-champagne-2"><MapPinIcon size={13} /> Le Grand Tunis</p>
+              <p className="flex items-center gap-2 text-[10px] font-bold tracking-[0.02em] text-champagne-2"><MapPinIcon size={13} /> Le Grand Tunis</p>
               <p className="mt-1 text-sm text-charcoal">Ezzahra · Hammam-Lif</p>
             </div>
           </Reveal>

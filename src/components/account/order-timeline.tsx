@@ -12,12 +12,12 @@ export function OrderTimeline({ status, events }: { status: OrderStatus; events:
   const idx = terminal ? -1 : ORDER_FLOW.indexOf(status);
   return (
     <div>
-      {terminal ? <p className="mb-6 inline-flex bg-error-soft px-3 py-1.5 text-xs uppercase tracking-[0.14em] text-error">{ORDER_STATUS_LABELS[status]}</p> : (
+      {terminal ? <p className="mb-6 inline-flex bg-error-soft px-3 py-1.5 text-xs tracking-[0.02em] text-error">{ORDER_STATUS_LABELS[status]}</p> : (
         <ol className="grid grid-cols-5 gap-1" aria-label="Progression">
           {ORDER_FLOW.map((s, i) => (
             <li key={s} className="flex flex-col items-center text-center">
               <motion.span initial={reduce ? false : { scale: 0.7, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: i * 0.12, duration: 0.6, ease: EASE_LUXE }} className={`flex h-8 w-8 items-center justify-center border ${i <= idx ? "border-ink bg-ink text-paper" : "border-stone-2 text-muted-2"}`}>{i < idx ? <CheckIcon size={14} /> : <span className="text-[11px]">{i + 1}</span>}</motion.span>
-              <span className={`mt-2 text-[10px] uppercase tracking-[0.12em] ${i <= idx ? "text-ink" : "text-muted-2"}`}>{ORDER_STATUS_LABELS[s]}</span>
+              <span className={`mt-2 text-[10px] tracking-[0.02em] ${i <= idx ? "text-ink" : "text-muted-2"}`}>{ORDER_STATUS_LABELS[s]}</span>
             </li>
           ))}
         </ol>

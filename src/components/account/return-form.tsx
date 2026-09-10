@@ -22,7 +22,7 @@ export function ReturnForm({ orderId, items }: { orderId: number; items: { id: n
       <div className="border border-stone bg-cream p-5">
         <p className="font-display text-lg italic text-ink">Demande envoyée</p>
         <p className="mt-2 text-sm text-muted">{state.message}</p>
-        <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-champagne-2">Référence : {state.data?.number}</p>
+        <p className="mt-3 text-xs font-bold tracking-[0.02em] text-champagne-2">Référence : {state.data?.number}</p>
       </div>
     );
   }

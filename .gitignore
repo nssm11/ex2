@@ -27,3 +27,6 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# Donnees locales PostgreSQL (hors depot)
+.pgdata/

@@ -32,7 +32,7 @@ export function Footer({ universes, stores }: { universes: { slug: string; name:
             <LogoMark size={32} className="text-champagne-3" />
             <span className="flex flex-col leading-none">
               <span className="font-display text-[26px] font-medium tracking-[0.01em]">Cléopâtre</span>
-              <span className="mt-1 text-[8px] font-bold uppercase tracking-[0.34em] text-paper/45">Espace Santé Beauté</span>
+              <span className="mt-1 text-[8px] font-bold tracking-[0.02em] text-paper/45">Espace Santé Beauté</span>
             </span>
           </div>
           <p className="mt-6 text-sm leading-relaxed text-paper/60">Parapharmacie premium fondée à Ezzahra. Une sélection resserrée,
@@ -42,7 +42,7 @@ export function Footer({ universes, stores }: { universes: { slug: string; name:
             <label htmlFor="nl" className="eyebrow mb-4 block text-champagne-3">Le Journal, chaque mois</label>
             <div className="flex border-b border-paper/30 transition-colors focus-within:border-champagne-3">
               <input id="nl" name="email" type="email" required placeholder="Votre adresse e-mail" className="min-h-12 w-full bg-transparent text-sm text-paper placeholder:text-paper/35 focus:outline-none" />
-              <button disabled={pending} aria-label="S'inscrire à la newsletter" className="flex shrink-0 items-center gap-2 px-2 text-[11px] font-bold uppercase tracking-[0.18em] text-champagne-3 transition-opacity hover:opacity-70 disabled:opacity-40">
+              <button disabled={pending} aria-label="S'inscrire à la newsletter" className="flex shrink-0 items-center gap-2 px-2 text-[11px] font-bold tracking-[0.02em] text-champagne-3 transition-opacity hover:opacity-70 disabled:opacity-40">
                 {pending ? "…" : "S'inscrire"} <ArrowRightIcon size={13} />
               </button>
             </div>

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect } from "react";
-import { CloseIcon, HeartIcon, SearchIcon, UserIcon, ArrowRightIcon, ChevronDownIcon, ChevronRightIcon } from "@/components/icons";
+import { CartIcon, CloseIcon, HeartIcon, SearchIcon, UserIcon, ArrowRightIcon, ChevronDownIcon, ChevronRightIcon } from "@/components/icons";
 import type { SafeUser } from "@/lib/auth";
 
 type NavChild = { id: number; slug: string; name: string };
@@ -86,7 +86,7 @@ export function MobileDrawer({
                   <Link
                     href="/boutique?sort=newest"
                     onClick={onClose}
-                    className="flex min-h-[48px] items-center justify-between border-b border-stone/50 py-3 text-[15px] font-semibold uppercase tracking-[0.04em] text-champagne-2"
+                    className="flex min-h-[48px] items-center justify-between border-b border-stone/50 py-3 text-[15px] font-semibold tracking-[0.04em] text-champagne-2"
                   >
                     Nouveautés
                     <ChevronRightIcon size={14} />
@@ -129,7 +129,7 @@ export function MobileDrawer({
                   <Link
                     href="/promotions"
                     onClick={onClose}
-                    className="flex min-h-[48px] items-center justify-between border-b border-stone/50 py-3 text-[15px] font-semibold uppercase tracking-[0.04em] text-champagne-2"
+                    className="flex min-h-[48px] items-center justify-between border-b border-stone/50 py-3 text-[15px] font-semibold tracking-[0.04em] text-champagne-2"
                   >
                     Offres
                     <ChevronRightIcon size={14} />
@@ -138,7 +138,14 @@ export function MobileDrawer({
               </ul>
 
               <div className="mt-6 space-y-1">
-                <p className="px-1 pb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted">Mon compte</p>
+                <p className="px-1 pb-2 text-[10px] font-bold text-muted">Mon espace</p>
+                <Link
+                  href="/panier"
+                  onClick={onClose}
+                  className="flex min-h-[46px] items-center gap-3 px-3 text-[14px] text-ink"
+                >
+                  <CartIcon size={16} className="text-champagne-2" /> Mon panier
+                </Link>
                 {user ? (
                   <>
                     <Link
@@ -186,7 +193,7 @@ export function MobileDrawer({
               </div>
             </div>
 
-            <div className="shrink-0 border-t border-stone px-5 py-4 text-[10px] uppercase tracking-[0.2em] text-muted">
+            <div className="shrink-0 border-t border-stone px-5 py-4 text-[10px] tracking-[0.02em] text-muted">
               <div className="flex items-center justify-between">
                 <span>Conseil 71 450 210</span>
                 <span>Livraison 24–72 h</span>

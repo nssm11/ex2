@@ -38,7 +38,7 @@ export function useFilterParams() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <details open className="group border-b border-stone py-4">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-xs uppercase tracking-[0.16em] text-ink">{title}<span className="text-muted transition-transform duration-500 group-open:rotate-45"><span className="block text-lg leading-none">+</span></span></summary>
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-xs tracking-[0.02em] text-ink">{title}<span className="text-muted transition-transform duration-500 group-open:rotate-45"><span className="block text-lg leading-none">+</span></span></summary>
       <div className="pt-3">{children}</div>
     </details>
   );
@@ -70,7 +70,7 @@ export function FilterPanel({ facets, hideConcerns = false, hideBrands = false }
   return (
     <div className={f.pending ? "opacity-60 transition-opacity" : "transition-opacity"}>
       <div className="flex items-center justify-between border-b border-stone pb-3">
-        <span className="flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-ink"><FilterIcon size={14} /> Filtres {f.activeCount > 0 && <span className="bg-ink px-1.5 py-0.5 text-[10px] text-paper">{f.activeCount}</span>}</span>
+        <span className="flex items-center gap-2 text-xs tracking-[0.02em] text-ink"><FilterIcon size={14} /> Filtres {f.activeCount > 0 && <span className="bg-ink px-1.5 py-0.5 text-[10px] text-paper">{f.activeCount}</span>}</span>
         {f.activeCount > 0 && <button onClick={f.clearAll} className="min-h-11 text-xs text-muted underline-offset-4 hover:text-ink hover:underline">Tout effacer</button>}
       </div>
       <Section title="Disponibilité">
@@ -118,7 +118,7 @@ export function MobileFilters(props: { facets: Facets; hideConcerns?: boolean; h
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [open]);
   return (
     <>
-      <button onClick={() => setOpen(true)} className="flex min-h-11 items-center gap-2 border border-stone-2 px-4 text-xs uppercase tracking-[0.14em] text-ink lg:hidden"><FilterIcon size={14} /> Filtres {f.activeCount > 0 && `(${f.activeCount})`}</button>
+      <button onClick={() => setOpen(true)} className="flex min-h-11 items-center gap-2 border border-stone-2 px-4 text-xs tracking-[0.02em] text-ink lg:hidden"><FilterIcon size={14} /> Filtres {f.activeCount > 0 && `(${f.activeCount})`}</button>
       <AnimatePresence>
         {open && (
           <>

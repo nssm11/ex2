@@ -56,7 +56,7 @@ export function PageHeader({
 // Breadcrumbs
 export function Breadcrumbs({ items, light }: { items: { href?: string; label: string }[]; light?: boolean }) {
   return (
-    <nav aria-label="Fil d'Ariane" className={cn("text-[11px] uppercase tracking-[0.18em]", light ? "text-paper/70" : "text-muted")}>
+    <nav aria-label="Fil d'Ariane" className={cn("text-[11px] tracking-[0.02em]", light ? "text-paper/70" : "text-muted")}>
       <ol className="flex flex-wrap items-center gap-2">
         <li><Link href="/" className={cn("transition-colors hover:text-champagne", light ? "hover:text-paper" : "hover:text-ink")}>Accueil</Link></li>
         {items.map((it, i) => (
@@ -100,7 +100,7 @@ export function Badge({ children, tone = "neutral", className }: { children: Rea
     ink: "bg-ink text-paper",
     outline: "border border-current",
   };
-  return <span className={cn("inline-flex items-center px-2 py-1 text-[9px] font-bold uppercase tracking-[0.18em]", tones[tone], className)}>{children}</span>;
+  return <span className={cn("inline-flex items-center px-2 py-1 text-[9px] font-bold tracking-[0.02em]", tones[tone], className)}>{children}</span>;
 }
 
 // Quantity stepper
@@ -127,7 +127,7 @@ export function Steps({ steps, current }: { steps: string[]; current: number }) 
             <span className={cn("flex h-8 w-8 shrink-0 items-center justify-center border text-[11px] tabular-nums transition-all duration-500",
               done ? "border-ink bg-ink text-paper" : active ? "border-champagne bg-champagne-soft text-champagne-2" : "border-stone-2 text-muted-2")}
               aria-current={active ? "step" : undefined}>{done ? "✓" : i + 1}</span>
-            <span className={cn("hidden text-[10px] font-semibold uppercase tracking-[0.18em] sm:block", active ? "text-ink" : "text-muted-2")}>{s}</span>
+            <span className={cn("hidden text-[10px] font-semibold tracking-[0.02em] sm:block", active ? "text-ink" : "text-muted-2")}>{s}</span>
             {i < steps.length - 1 && <span className={cn("h-px flex-1 transition-colors duration-700", done ? "bg-champagne" : "bg-stone-2/60")} />}
           </li>
         );
@@ -140,7 +140,7 @@ export function Steps({ steps, current }: { steps: string[]; current: number }) 
 export function Field({ label, error, children, hint, htmlFor }: { label: string; error?: string; children: ReactNode; hint?: string; htmlFor?: string }) {
   return (
     <label className="block text-left" htmlFor={htmlFor}>
-      <span className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">{label}</span>
+      <span className="mb-2 block text-[10px] font-semibold tracking-[0.02em] text-muted">{label}</span>
       {children}
       {hint && !error && <span className="mt-1.5 block text-xs text-muted-2">{hint}</span>}
       {error && <span className="mt-1.5 block text-xs font-medium text-error" role="alert">{error}</span>}

@@ -14,7 +14,7 @@ export default function NotFound() {
             <p className="mt-5 max-w-md text-[15px] leading-relaxed text-paper/65">Le lien est peut-être ancien, ou le produit n&apos;est plus référencé dans notre sélection. Nos rayons, eux, sont bien ouverts.</p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link href="/boutique" className="btn-light">Explorer la boutique</Link>
-              <Link href="/" className="inline-flex min-h-[52px] items-center justify-center gap-2 border border-paper/40 px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-paper transition-colors hover:border-paper hover:bg-paper hover:text-noir">Retour à l&apos;accueil</Link>
+              <Link href="/" className="inline-flex min-h-[52px] items-center justify-center gap-2 border border-paper/40 px-8 text-[11px] font-bold tracking-[0.02em] text-paper transition-colors hover:border-paper hover:bg-paper hover:text-noir">Retour à l&apos;accueil</Link>
             </div>
           </Reveal>
         </div>

@@ -49,7 +49,7 @@ export default async function AdminSupport() {
     >
       {returns.length > 0 && (
         <section className="mb-10">
-          <h2 className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-admin-gold">Retours en attente</h2>
+          <h2 className="mb-4 text-[10px] font-bold tracking-[0.02em] text-admin-gold">Retours en attente</h2>
           <div className="space-y-3">
             {returns.map((r) => (
               <Panel key={r.id} className="p-4">
@@ -71,7 +71,7 @@ export default async function AdminSupport() {
                     </p>
                     {r.message && <p className="mt-2 whitespace-pre-line text-xs text-admin-muted italic">{r.message}</p>}
                   </div>
-                  <span className="shrink-0 border border-admin-gold/30 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.16em] text-admin-gold">
+                  <span className="shrink-0 border border-admin-gold/30 px-2 py-0.5 text-[9px] font-bold tracking-[0.02em] text-admin-gold">
                     {RETURN_STATUS_LABELS[r.status] ?? r.status}
                   </span>
                 </div>
@@ -82,7 +82,7 @@ export default async function AdminSupport() {
       )}
 
       <section>
-        <h2 className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-admin-muted">Tickets</h2>
+        <h2 className="mb-4 text-[10px] font-bold tracking-[0.02em] text-admin-muted">Tickets</h2>
         {tickets.length === 0 ? (
           <p className="text-sm text-admin-muted">Boîte vide.</p>
         ) : (
@@ -92,14 +92,14 @@ export default async function AdminSupport() {
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-3">
                     <p className="text-sm">{t.subject}</p>
-                    <span className="border border-admin-border px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-admin-muted">
+                    <span className="border border-admin-border px-2 py-0.5 text-[9px] font-bold tracking-[0.02em] text-admin-muted">
                       {TYPE_LABELS[t.type] ?? t.type}
                     </span>
                     {t.status === "open" && !t.readAt && (
-                      <span className="bg-admin-gold px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-noir">Nouveau</span>
+                      <span className="bg-admin-gold px-1.5 py-0.5 text-[9px] font-bold tracking-wider text-noir">Nouveau</span>
                     )}
                   </div>
-                  <span className="text-xs uppercase tracking-[0.12em] text-admin-muted">{t.status}</span>
+                  <span className="text-xs tracking-[0.02em] text-admin-muted">{t.status}</span>
                 </div>
                 <p className="mt-1 text-xs text-admin-muted">
                   {t.name} · {t.email} {t.orderNumber && `· ${t.orderNumber}`} · {formatDateTime(t.createdAt)}

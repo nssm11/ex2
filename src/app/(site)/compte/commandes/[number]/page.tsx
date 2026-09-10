@@ -53,11 +53,11 @@ export default async function CommandePage({ params }: { params: Promise<{ numbe
                 {i.image && <Image src={i.image} alt="" fill sizes="64px" className="object-cover" />}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] uppercase tracking-[0.16em] text-muted">{i.brandName}</p>
+                <p className="text-[10px] tracking-[0.02em] text-muted">{i.brandName}</p>
                 <p className="text-sm text-ink">{i.name}</p>
                 <p className="text-xs text-muted">{i.quantity} × {formatDT(i.unitPriceMillimes)}</p>
                 {returnedItemIds.has(i.id) && (
-                  <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-warning">Retour demandé</p>
+                  <p className="mt-1 text-[10px] font-semibold tracking-[0.02em] text-warning">Retour demandé</p>
                 )}
               </div>
               <span className="text-sm tabular-nums text-ink">{formatDT(i.lineTotalMillimes)}</span>

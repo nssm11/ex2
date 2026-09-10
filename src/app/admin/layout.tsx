@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             <LogoMark size={26} className="text-admin-gold" />
             <span className="flex flex-col leading-none">
               <span className="font-display text-[19px] tracking-[0.01em]">Cléopâtre</span>
-              <span className="mt-0.5 text-[8px] font-bold uppercase tracking-[0.3em] text-admin-muted">Back office</span>
+              <span className="mt-0.5 text-[8px] font-bold tracking-[0.02em] text-admin-muted">Back office</span>
             </span>
           </Link>
           <div className="flex items-center gap-6 text-xs">
@@ -28,7 +28,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
               <span className="flex h-7 w-7 items-center justify-center rounded-full border border-admin-border bg-admin-panel font-display text-xs italic text-admin-gold">{user.firstName.charAt(0)}{user.lastName.charAt(0)}</span>
               <span className="flex flex-col leading-tight">
                 <span className="text-admin-text">{user.firstName} {user.lastName}</span>
-                <span className="text-[10px] uppercase tracking-[0.18em] text-admin-muted">{user.role === "admin" ? "Administrateur" : "Support"}</span>
+                <span className="text-[10px] tracking-[0.02em] text-admin-muted">{user.role === "admin" ? "Administrateur" : "Support"}</span>
               </span>
             </span>
             <Link href="/" className="flex min-h-10 items-center gap-1.5 text-admin-muted transition-colors hover:text-admin-gold"><ExternalIcon size={13} /> <span className="hidden sm:inline">Voir la boutique</span></Link>

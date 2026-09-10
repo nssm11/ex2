@@ -8,6 +8,7 @@ import { orderEvents, orderItems, orders, stores, users } from "@/db/schema";
 import { createSession, getCurrentUser, hashPassword } from "@/lib/auth";
 import { fail, MESSAGES, ok, zodFieldErrors, type ActionResult } from "@/lib/api";
 import { GIFT_WRAP_FEE, shippingFor } from "@/lib/money";
+import { isInStock, safeStock } from "@/lib/stock";
 import { checkOrigin, clientKey } from "@/lib/origin";
 import {
   addOrderEvent,
@@ -25,6 +26,7 @@ import { isPaymentMethodEnabled } from "@/lib/payments";
 import { reservePromoUsage } from "@/lib/promotions";
 import { rateLimit } from "@/lib/rate-limit";
 import { checkoutSchema } from "@/lib/validation";
+import { MAX_CART_QTY } from "@/lib/cart";
 import { log } from "@/lib/logger";
 
 /**
@@ -59,7 +61,7 @@ export async function placeOrderAction(input: unknown): Promise<ActionResult<{ n
 
   // merge duplicate lines
   const merged = new Map<number, number>();
-  for (const l of data.lines) merged.set(l.productId, Math.min(20, (merged.get(l.productId) ?? 0) + l.quantity));
+  for (const l of data.lines) merged.set(l.productId, Math.min(MAX_CART_QTY, (merged.get(l.productId) ?? 0) + l.quantity));
 
   try {
     const result = await db.transaction(async (tx) => {
@@ -72,8 +74,17 @@ export async function placeOrderAction(input: unknown): Promise<ActionResult<{ n
       const lines = [] as { productId: number; name: string; sku: string; image: string | null; brandId: number | null; universeId: number | null; unit: number; qty: number; total: number }[];
       for (const [pid, qty] of merged) {
         const p = locked.find((x) => x.id === pid);
+        // Same stock rules as the storefront (`lib/stock`): an unknown stock is
+        // treated as sold out, so a product can never be oversold here.
         if (!p || p.status !== "active") throw new Error(`Un article n'est plus disponible.`);
-        if (p.stock < qty) throw new Error(`Stock insuffisant pour « ${p.name} » (${p.stock} restant${p.stock > 1 ? "s" : ""}).`);
+        const available = safeStock(p.stock);
+        if (!isInStock(available) || available < qty) {
+          throw new Error(
+            available <= 0
+              ? `« ${p.name} » est épuisé. Retirez-le de votre panier pour continuer.`
+              : `Stock insuffisant pour « ${p.name} » (${available} restant${available > 1 ? "s" : ""}).`,
+          );
+        }
         lines.push({ productId: p.id, name: p.name, sku: p.sku, image: p.image, brandId: p.brand_id, universeId: p.universe_id, unit: p.price_millimes, qty, total: p.price_millimes * qty });
       }
       const subtotal = lines.reduce((a, l) => a + l.total, 0);

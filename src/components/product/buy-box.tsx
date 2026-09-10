@@ -2,15 +2,17 @@
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useCart } from "@/components/cart/cart-provider";
 import { CheckIcon, HeartIcon, ShieldIcon, StoreIcon, TruckIcon } from "@/components/icons";
 import { QtyStepper } from "@/components/ui/primitives";
 import { useToast } from "@/components/ui/toaster";
 import { formatDT, FREE_SHIPPING_THRESHOLD } from "@/lib/money";
+import { isLowStock, isOutOfStock, maxPurchasable, safeStock } from "@/lib/stock";
 import { EASE_LUXE } from "@/lib/motion";
 import { toggleWishlistAction } from "@/actions/shop";
 
-type P = { id: number; slug: string; name: string; brandName: string | null; image: string | null; priceMillimes: number; compareAtMillimes: number | null; stock: number; lowStockThreshold: number; volume: string | null };
+type P = { id: number; slug: string; name: string; brandName: string | null; image: string | null; priceMillimes: number; compareAtMillimes: number | null; stock: number | null; lowStockThreshold: number | null; volume: string | null };
 
 export function BuyBox({ p, wished, isAuthed }: { p: P; wished: boolean; isAuthed: boolean }) {
   const cart = useCart();
@@ -21,11 +23,16 @@ export function BuyBox({ p, wished, isAuthed }: { p: P; wished: boolean; isAuthe
   const [added, setAdded] = useState(false);
   const [w, setW] = useState(wished);
   const [pending, start] = useTransition();
-  const out = p.stock <= 0;
-  const low = !out && p.stock <= p.lowStockThreshold;
+  // Stock can legitimately arrive as 0, null or undefined (stale cart payload,
+  // partially loaded row…). It must never crash the page, and must never leave
+  // an "add to cart" control enabled for a product we cannot actually ship.
+  const stock = safeStock(p.stock);
+  const out = isOutOfStock(stock);
+  const low = isLowStock(stock, p.lowStockThreshold);
 
   const add = () => {
-    cart.add({ productId: p.id, slug: p.slug, name: p.name, brandName: p.brandName, image: p.image, priceMillimes: p.priceMillimes, stock: p.stock, volume: p.volume }, qty);
+    if (out) return;
+    cart.add({ productId: p.id, slug: p.slug, name: p.name, brandName: p.brandName, image: p.image, priceMillimes: p.priceMillimes, stock, volume: p.volume }, qty);
     setAdded(true); setTimeout(() => setAdded(false), 1600);
     toast({ kind: "success", title: "Ajouté au panier", description: `${qty} × ${p.name}`, action: { label: "Voir le panier", onClick: cart.open } });
   };
@@ -37,13 +44,25 @@ export function BuyBox({ p, wished, isAuthed }: { p: P; wished: boolean; isAuthe
   return (
     <>
       <div className="space-y-5">
-        {out ? <p className="text-sm text-muted">Ce produit est momentanément épuisé. Contactez nos boutiques pour être prévenu(e) du réassort.</p>
-          : <div className="flex flex-wrap items-center gap-4"><QtyStepper value={qty} onChange={setQty} max={Math.min(20, p.stock)} />{low && <p className="text-xs text-warning">Plus que {p.stock} en stock</p>}{!low && <p className="text-xs text-success">En stock</p>}</div>}
+        {out ? (
+          <div className="border border-stone-2/70 bg-cream px-4 py-3.5">
+            <p className="text-[13px] font-semibold text-error">Épuisé — rupture de stock</p>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
+              Ce produit est momentanément indisponible. Nous le remettons en vente dès réassort&nbsp;: contactez nos boutiques pour être prévenu(e).
+            </p>
+            <Link href="/boutiques" className="mt-2.5 inline-block text-[13px] font-medium text-ink underline underline-offset-4">Voir les boutiques</Link>
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center gap-4">
+            <QtyStepper value={qty} onChange={setQty} max={maxPurchasable(stock)} />
+            {low ? <p className="text-xs text-warning">Plus que {stock} en stock</p> : <p className="text-xs text-success">En stock</p>}
+          </div>
+        )}
         <div className="flex gap-3">
           <button onClick={add} disabled={out} className="btn-primary relative flex-1 overflow-hidden">
             <AnimatePresence mode="wait" initial={false}>
               {added ? <motion.span key="ok" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.4, ease: EASE_LUXE }} className="flex items-center gap-2"><CheckIcon size={16} /> Ajouté au panier</motion.span>
-                : <motion.span key="add" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">{out ? "Épuisé" : `Ajouter · ${formatDT(p.priceMillimes * qty)}`}</motion.span>}
+                : <motion.span key="add" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">{out ? "Épuisé" : `Ajouter au panier · ${formatDT(p.priceMillimes * qty)}`}</motion.span>}
             </AnimatePresence>
           </button>
           <button onClick={wish} disabled={pending} aria-pressed={w} aria-label={w ? "Retirer des favoris" : "Ajouter aux favoris"} className={`flex h-12 w-12 shrink-0 items-center justify-center border transition-colors ${w ? "border-champagne text-champagne-2" : "border-ink text-ink hover:bg-ink hover:text-paper"}`}>
@@ -59,7 +78,7 @@ export function BuyBox({ p, wished, isAuthed }: { p: P; wished: boolean; isAuthe
       {/* Sticky mobile bar */}
       <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-stone bg-paper/95 px-4 py-3 backdrop-blur-xl lg:hidden" style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
         <div className="min-w-0 flex-1"><p className="truncate text-xs text-muted">{p.name}</p><p className="text-sm font-medium tabular-nums text-ink">{formatDT(p.priceMillimes * qty)}</p></div>
-        <button onClick={add} disabled={out} className="btn-primary px-6">{added ? <CheckIcon size={16} /> : out ? "Épuisé" : "Ajouter"}</button>
+        <button onClick={add} disabled={out} aria-disabled={out} className="btn-primary px-6">{added ? <CheckIcon size={16} /> : out ? "Épuisé" : "Ajouter"}</button>
       </div>
     </>
   );

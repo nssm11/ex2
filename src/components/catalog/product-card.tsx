@@ -11,6 +11,7 @@ import { Stars } from "@/components/ui/stars";
 import { useToast } from "@/components/ui/toaster";
 import type { ProductCard as PC } from "@/lib/catalog";
 import { discountPercent, formatDT } from "@/lib/money";
+import { isLowStock, isOutOfStock, safeStock } from "@/lib/stock";
 import { EASE_LUXE } from "@/lib/motion";
 import { toggleWishlistAction } from "@/actions/shop";
 import { cn } from "@/lib/utils";
@@ -24,12 +25,13 @@ export function ProductCard({ p, wished = false, priority = false, isAuthed = fa
   const [w, setW] = useState(wished);
   const [pending, start] = useTransition();
   const pct = discountPercent(p.priceMillimes, p.compareAtMillimes);
-  const out = p.stock <= 0;
-  const low = !out && p.stock <= p.lowStockThreshold;
+  const stock = safeStock(p.stock);
+  const out = isOutOfStock(stock);
+  const low = isLowStock(stock, p.lowStockThreshold);
 
   const quickAdd = () => {
     if (out) return;
-    cart.add({ productId: p.id, slug: p.slug, name: p.name, brandName: p.brandName, image: p.image, priceMillimes: p.priceMillimes, stock: p.stock, volume: p.volume });
+    cart.add({ productId: p.id, slug: p.slug, name: p.name, brandName: p.brandName, image: p.image, priceMillimes: p.priceMillimes, stock, volume: p.volume });
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
     toast({ kind: "success", title: "Ajouté au panier", description: p.name, action: { label: "Voir le panier", onClick: cart.open } });
@@ -58,7 +60,7 @@ export function ProductCard({ p, wished = false, priority = false, isAuthed = fa
           )}
         </Link>
         {out && (
-          <span className="pointer-events-none absolute bottom-3 left-3 z-10 border border-ink/15 bg-paper/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.22em] text-ink/80 backdrop-blur-sm">Épuisé</span>
+          <span className="pointer-events-none absolute bottom-3 left-3 z-10 border border-ink/15 bg-paper/90 px-2.5 py-1 text-[9px] font-bold tracking-[0.02em] text-ink/80 backdrop-blur-sm">Épuisé</span>
         )}
         <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-col items-start gap-1.5">
           {pct > 0 && <Badge tone="ink">-{pct} %</Badge>}
@@ -78,7 +80,7 @@ export function ProductCard({ p, wished = false, priority = false, isAuthed = fa
             <button
               onClick={quickAdd}
               aria-label={`Ajouter ${p.name} au panier`}
-              className="flex h-11 w-full items-center justify-center gap-2 bg-paper/95 text-[10px] font-bold uppercase tracking-[0.2em] text-ink backdrop-blur transition-all duration-500 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+              className="flex h-11 w-full items-center justify-center gap-2 bg-paper/95 text-[10px] font-bold tracking-[0.02em] text-ink backdrop-blur transition-all duration-500 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {added ? (
@@ -94,7 +96,7 @@ export function ProductCard({ p, wished = false, priority = false, isAuthed = fa
 
       <div className="flex flex-1 flex-col pt-5">
         <div className="flex items-center justify-between gap-3">
-          {p.brandName ? <Link href={`/marque/${p.brandSlug}`} className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted transition-colors hover:text-champagne-2">{p.brandName}</Link> : <span />}
+          {p.brandName ? <Link href={`/marque/${p.brandSlug}`} className="text-[9px] font-bold tracking-[0.02em] text-muted transition-colors hover:text-champagne-2">{p.brandName}</Link> : <span />}
           {p.volume && <span className="text-[10px] text-muted-2">{p.volume}</span>}
         </div>
         <h3 className="mt-2 text-[15px] leading-snug text-ink"><Link href={`/produit/${p.slug}`} className="line-clamp-2 underline-offset-4 hover:underline">{p.name}</Link></h3>
@@ -104,7 +106,8 @@ export function ProductCard({ p, wished = false, priority = false, isAuthed = fa
               <span className="text-[15px] font-medium tabular-nums tracking-tight text-ink">{formatDT(p.priceMillimes)}</span>
               {pct > 0 && p.compareAtMillimes && <span className="text-xs tabular-nums text-muted-2 line-through">{formatDT(p.compareAtMillimes)}</span>}
             </div>
-            {low && <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-warning">Plus que {p.stock} en stock</p>}
+            {low && <p className="mt-1 text-[10px] font-semibold text-warning">Plus que {stock} en stock</p>}
+            {out && <p className="mt-1 text-[10px] font-semibold text-error">Rupture de stock</p>}
             {!low && !out && <p className="mt-1 text-[10px] text-muted-2">En stock · livré 24–72 h</p>}
           </div>
           {p.ratingCount > 0 && <Stars value={p.ratingAvg / 100} count={p.ratingCount} size={10} />}

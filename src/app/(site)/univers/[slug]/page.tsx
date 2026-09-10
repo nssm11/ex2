@@ -58,7 +58,7 @@ export default async function UniversPage({ params, searchParams }: { params: Pr
       {others.length > 0 && (
         <div className="border-t border-stone bg-cream">
           <div className="container-lux flex flex-wrap gap-x-10 gap-y-4 py-8">
-            <p className="mr-2 flex items-center text-[10px] font-bold uppercase tracking-[0.2em] text-muted">Autres univers</p>
+            <p className="mr-2 flex items-center text-[10px] font-bold tracking-[0.02em] text-muted">Autres univers</p>
             {others.map((o) => <Link key={o.id} href={`/univers/${o.slug}`} className="flex items-center gap-2 font-display text-lg text-charcoal transition-colors hover:text-champagne-2"><span className="text-xs italic text-muted-2">→</span>{o.name}</Link>)}
           </div>
         </div>

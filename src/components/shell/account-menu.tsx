@@ -98,12 +98,12 @@ export function AccountMenu({ user, wishlistCount }: { user: SafeUser | null; wi
             className="absolute right-0 top-full z-[60] mt-2 w-64 border border-stone bg-cream shadow-float"
           >
             <div className="border-b border-stone px-4 py-3">
-              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted">Bonjour</p>
+              <p className="text-[10px] font-bold tracking-[0.02em] text-muted">Bonjour</p>
               <p className="mt-0.5 font-display text-lg italic leading-tight text-ink">
                 {user.firstName} {user.lastName}
               </p>
               {isStaff && (
-                <p className="mt-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-champagne-2">
+                <p className="mt-1 text-[9px] font-semibold tracking-[0.02em] text-champagne-2">
                   {user.role === "admin" ? "Administrateur" : "Support"}
                 </p>
               )}
@@ -126,7 +126,7 @@ export function AccountMenu({ user, wishlistCount }: { user: SafeUser | null; wi
             {isStaff && (
               <Link
                 href="/compte"
-                className="block border-t border-stone px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted transition-colors hover:bg-paper hover:text-charcoal"
+                className="block border-t border-stone px-4 py-2.5 text-[11px] font-semibold tracking-[0.02em] text-muted transition-colors hover:bg-paper hover:text-charcoal"
               >
                 Espace client
               </Link>

@@ -42,7 +42,7 @@ export default async function BesoinPage({ params, searchParams }: { params: Pro
               <p className="eyebrow mb-4">Autres besoins</p>
               <div className="flex flex-wrap gap-2">
                 {all.filter((x) => x.id !== c.id).map((x) => (
-                  <Link key={x.id} href={`/besoin/${x.slug}`} className="inline-flex min-h-10 items-center border border-stone-2 bg-paper px-3.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-charcoal transition-colors hover:border-ink hover:text-ink">{x.name}</Link>
+                  <Link key={x.id} href={`/besoin/${x.slug}`} className="inline-flex min-h-10 items-center border border-stone-2 bg-paper px-3.5 text-[11px] font-semibold tracking-[0.02em] text-charcoal transition-colors hover:border-ink hover:text-ink">{x.name}</Link>
                 ))}
               </div>
             </nav>

@@ -7,7 +7,7 @@ const FAQ = [
   ["Quels sont les délais de livraison ?", "24 à 48 h sur le Grand Tunis, 48 à 72 h ailleurs en Tunisie. Les commandes passées avant 14 h partent le jour même (hors dimanche)."],
   ["Quels moyens de paiement acceptez-vous ?", "Le paiement à la livraison (espèces), le virement bancaire et prochainement la carte bancaire. Les cartes cadeaux Cléopâtre sont acceptées en ligne et en boutique."],
   ["Les produits sont-ils authentiques ?", "Oui. Nous nous approvisionnons exclusivement auprès des laboratoires et distributeurs officiels en Tunisie. Chaque produit porte son numéro de lot et sa date de péremption."],
-  ["Puis-je retirer ma commande en boutique ?", "Oui, choisissez « Click & Collect » lors de la commande. Elle sera prête sous 2 h à Ezzahra ou Hammam-Lif, sans frais."],
+  ["Puis-je retirer ma commande en boutique ?", "Oui, choisissez « Retrait en boutique » lors de la commande. Elle sera prête sous 2 h à Ezzahra ou Hammam-Lif, sans frais."],
   ["Comment retourner un produit ?", "Vous disposez de 7 jours après réception pour demander un retour depuis votre compte, pour tout produit non ouvert. Nous vous recontactons sous 48 h."],
   ["Puis-je annuler ma commande ?", "Oui, tant qu'elle n'est pas en préparation, directement depuis « Mes commandes ». Les articles sont remis en stock immédiatement."],
   ["Que faire en cas de réaction cutanée ?", "Arrêtez le produit et contactez-nous : nos pharmaciens évaluent la situation avec vous. Si nécessaire, consultez un médecin — la peau d'abord."],

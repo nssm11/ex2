@@ -29,7 +29,7 @@ export default async function CategoriePage({ params, searchParams }: { params: 
       >
         {siblings.length > 0 && (
           <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-stone pt-6">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted">Dans {c.parent?.name}</span>
+            <span className="text-[10px] font-bold tracking-[0.02em] text-muted">Dans {c.parent?.name}</span>
             {siblings.map((s) => (
               s.slug === c.slug
                 ? <span key={s.id} className="border-b border-champagne pb-1 text-sm text-champagne-2" aria-current="page">{s.name}</span>

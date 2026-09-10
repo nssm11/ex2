@@ -9,25 +9,43 @@ import { QtyStepper } from "@/components/ui/primitives";
 import { formatDT, FREE_SHIPPING_THRESHOLD, GIFT_WRAP_FEE, remainingForFreeShipping, shippingFor } from "@/lib/money";
 import type { ProductCard } from "@/lib/catalog";
 import { EASE_LUXE, tweenExit } from "@/lib/motion";
+import { isOutOfStock, maxPurchasable, safeStock } from "@/lib/stock";
 import { useFocusTrap } from "@/lib/use-focus-trap";
 
-export function CartDrawer({ upsells }: { upsells: ProductCard[] }) {
+export function CartDrawer() {
   const cart = useCart();
   const reduce = useReducedMotion();
   const drawerRef = useRef<HTMLElement>(null);
   useFocusTrap(drawerRef, cart.isOpen);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [reco, setReco] = useState<{ key: string; items: ProductCard[] }>({ key: "", items: [] });
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && cart.close();
     if (cart.isOpen) { window.addEventListener("keydown", onKey); document.body.style.overflow = "hidden"; }
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, [cart.isOpen, cart]);
 
+  // The shelf follows the cart: it is recomputed from the products the customer
+  // actually picked, and those products are never suggested back to them.
+  const seedKey = cart.hydrated ? cart.lines.map((l) => l.productId).join(",") : "";
+  useEffect(() => {
+    if (!cart.isOpen || !seedKey) return;
+    let on = true;
+    fetch(`/api/recommendations?ids=${seedKey}&limit=3`)
+      .then((r) => (r.ok ? r.json() : { items: [] }))
+      .then((d: { items?: ProductCard[] }) => { if (on) setReco({ key: seedKey, items: d.items ?? [] }); })
+      .catch(() => { /* keep the previous shelf rather than blanking it */ });
+    return () => { on = false; };
+  }, [seedKey, cart.isOpen]);
+  // Only show a shelf that was computed for the cart currently on screen.
+  const suggestions = reco.key === seedKey ? reco.items : [];
+
   const remaining = remainingForFreeShipping(cart.subtotal);
   const progress = Math.min(100, (cart.subtotal / FREE_SHIPPING_THRESHOLD) * 100);
   const shipping = shippingFor(cart.subtotal);
   const wrap = cart.giftWrap ? GIFT_WRAP_FEE : 0;
-  const suggestions = upsells.filter((u) => !cart.lines.some((l) => l.productId === u.id) && u.stock > 0).slice(0, 3);
+  const outOfStockLines = cart.lines.filter((l) => isOutOfStock(l.stock));
 
   return (
     <AnimatePresence>
@@ -56,7 +74,7 @@ export function CartDrawer({ upsells }: { upsells: ProductCard[] }) {
                 <BagIcon size={36} className="mb-5 text-sand-2" />
                 <p className="font-display text-display-sm text-ink">Votre panier est vide</p>
                 <p className="mt-2 text-sm text-muted">Découvrez notre sélection de soins conseillés par nos pharmaciens.</p>
-                <Link href="/boutique" onClick={cart.close} className="btn-primary mt-8">Découvrir la boutique</Link>
+                <Link href="/boutique" onClick={cart.close} className="btn-primary mt-8">Découvrez la boutique</Link>
               </div>
             ) : (
               <>
@@ -68,21 +86,26 @@ export function CartDrawer({ upsells }: { upsells: ProductCard[] }) {
                 <div className="flex-1 overflow-y-auto px-5">
                   <ul className="divide-y divide-stone">
                     <AnimatePresence initial={false}>
-                      {cart.lines.map((l) => (
-                        <motion.li key={l.productId} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: tweenExit }} className="flex gap-4 py-5">
-                          <Link href={`/produit/${l.slug}`} onClick={cart.close} className="relative h-24 w-20 shrink-0 overflow-hidden bg-stone">{l.image && <Image src={l.image} alt="" fill sizes="80px" className="object-cover" />}</Link>
-                          <div className="flex min-w-0 flex-1 flex-col">
-                            <p className="text-[10px] uppercase tracking-[0.16em] text-muted">{l.brandName}</p>
-                            <Link href={`/produit/${l.slug}`} onClick={cart.close} className="mt-0.5 line-clamp-2 text-sm text-ink">{l.name}</Link>
-                            {l.volume && <p className="text-xs text-muted-2">{l.volume}</p>}
-                            <div className="mt-auto flex items-center justify-between pt-3">
-                              <QtyStepper size="sm" value={l.quantity} max={Math.min(20, l.stock)} onChange={(v) => cart.setQty(l.productId, v)} />
-                              <span className="text-sm tabular-nums text-ink">{formatDT(l.priceMillimes * l.quantity)}</span>
+                      {cart.lines.map((l) => {
+                        const stock = safeStock(l.stock);
+                        const out = isOutOfStock(stock);
+                        return (
+                          <motion.li key={l.productId} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: tweenExit }} className="flex gap-4 py-5">
+                            <Link href={`/produit/${l.slug}`} onClick={cart.close} className="relative h-24 w-20 shrink-0 overflow-hidden bg-stone">{l.image && <Image src={l.image} alt="" fill sizes="80px" className="object-cover" />}</Link>
+                            <div className="flex min-w-0 flex-1 flex-col">
+                              <p className="text-[10px] tracking-[0.02em] text-muted">{l.brandName}</p>
+                              <Link href={`/produit/${l.slug}`} onClick={cart.close} className="mt-0.5 line-clamp-2 text-sm text-ink">{l.name}</Link>
+                              {l.volume && <p className="text-xs text-muted-2">{l.volume}</p>}
+                              {out && <p className="mt-1 text-[11px] font-semibold text-error">Épuisé — à retirer avant de commander</p>}
+                              <div className="mt-auto flex items-center justify-between pt-3">
+                                <QtyStepper size="sm" value={l.quantity} max={maxPurchasable(stock)} onChange={(v) => cart.setQty(l.productId, v)} />
+                                <span className="text-sm tabular-nums text-ink">{formatDT(l.priceMillimes * l.quantity)}</span>
+                              </div>
                             </div>
-                          </div>
-                          <button onClick={() => cart.remove(l.productId)} aria-label={`Retirer ${l.name}`} className="flex h-11 w-8 items-start justify-center pt-1 text-muted-2 hover:text-error"><TrashIcon size={16} /></button>
-                        </motion.li>
-                      ))}
+                            <button onClick={() => cart.remove(l.productId)} aria-label={`Retirer ${l.name}`} className="flex h-11 w-8 items-start justify-center pt-1 text-muted-2 transition-colors hover:text-error"><TrashIcon size={16} /></button>
+                          </motion.li>
+                        );
+                      })}
                     </AnimatePresence>
                   </ul>
 
@@ -90,13 +113,25 @@ export function CartDrawer({ upsells }: { upsells: ProductCard[] }) {
                     <div className="border-t border-stone py-5">
                       <p className="eyebrow mb-3">Complétez votre routine</p>
                       <ul className="space-y-3">
-                        {suggestions.map((s) => (
-                          <li key={s.id} className="flex items-center gap-3">
-                            <div className="relative h-14 w-12 shrink-0 overflow-hidden bg-stone">{s.image && <Image src={s.image} alt="" fill sizes="48px" className="object-cover" />}</div>
-                            <div className="min-w-0 flex-1"><p className="truncate text-xs text-ink">{s.name}</p><p className="text-xs text-muted">{formatDT(s.priceMillimes)}</p></div>
-                            <button onClick={() => cart.add({ productId: s.id, slug: s.slug, name: s.name, brandName: s.brandName, image: s.image, priceMillimes: s.priceMillimes, stock: s.stock, volume: s.volume })} className="min-h-11 border border-stone-2 px-3 text-[11px] uppercase tracking-[0.14em] text-ink hover:border-ink">Ajouter</button>
-                          </li>
-                        ))}
+                        {suggestions.map((s) => {
+                          const out = isOutOfStock(s.stock);
+                          return (
+                            <li key={s.id} className="flex items-center gap-3">
+                              <Link href={`/produit/${s.slug}`} onClick={cart.close} className="relative h-14 w-12 shrink-0 overflow-hidden bg-stone">{s.image && <Image src={s.image} alt="" fill sizes="48px" className="object-cover" />}</Link>
+                              <div className="min-w-0 flex-1">
+                                <p className="truncate text-xs text-ink">{s.name}</p>
+                                <p className="text-xs text-muted">{out ? "Épuisé" : formatDT(s.priceMillimes)}</p>
+                              </div>
+                              <button
+                                onClick={() => cart.add({ productId: s.id, slug: s.slug, name: s.name, brandName: s.brandName, image: s.image, priceMillimes: s.priceMillimes, stock: safeStock(s.stock), volume: s.volume })}
+                                disabled={out}
+                                className="min-h-11 border border-stone-2 px-3 text-[11px] tracking-[0.02em] text-ink transition-colors hover:border-ink disabled:cursor-not-allowed disabled:opacity-40"
+                              >
+                                Ajouter
+                              </button>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   )}
@@ -117,13 +152,23 @@ export function CartDrawer({ upsells }: { upsells: ProductCard[] }) {
                     {wrap > 0 && <div className="flex justify-between"><dt className="text-muted">Emballage cadeau</dt><dd className="tabular-nums text-ink">{formatDT(wrap)}</dd></div>}
                     <div className="flex justify-between border-t border-stone pt-2 text-base"><dt className="text-ink">Total</dt><dd className="font-medium tabular-nums text-ink">{formatDT(cart.subtotal + shipping + wrap)}</dd></div>
                   </dl>
-                  <Link href="/commande" onClick={cart.close} className="btn-primary mt-4 w-full">Commander</Link>
-                  <div className="mt-3 flex items-center justify-between text-xs">
-                    <Link href="/panier" onClick={cart.close} className="text-muted underline-offset-4 hover:text-ink hover:underline">Voir le panier</Link>
+
+                  {outOfStockLines.length > 0 && (
+                    <p className="mt-3 bg-error-soft px-3 py-2 text-xs text-error">
+                      {outOfStockLines.length === 1 ? "Un article de votre panier est épuisé" : `${outOfStockLines.length} articles de votre panier sont épuisés`} — retirez-le{outOfStockLines.length > 1 ? "s" : ""} pour passer commande.
+                    </p>
+                  )}
+
+                  <Link href="/commande" onClick={cart.close} className="btn-primary mt-4 w-full">Passer la commande</Link>
+
+                  {/* Two actions only: order, or empty the cart. The old
+                      "Voir le panier" link sat next to them and pointed at the
+                      page you were already on. */}
+                  <div className="mt-3 flex items-center justify-end text-xs">
                     {confirmClear ? (
-                      <span className="flex items-center gap-2 text-muted">Vider ? <button onClick={() => { cart.clear(); setConfirmClear(false); }} className="text-error">Oui</button><button onClick={() => setConfirmClear(false)} className="text-ink">Non</button></span>
+                      <span className="flex items-center gap-2 text-muted">Vider le panier&nbsp;? <button onClick={() => { cart.clear(); setConfirmClear(false); }} className="text-error underline underline-offset-4">Oui</button><button onClick={() => setConfirmClear(false)} className="text-ink underline underline-offset-4">Non</button></span>
                     ) : (
-                      <button onClick={() => setConfirmClear(true)} className="text-muted hover:text-error">Vider le panier</button>
+                      <button onClick={() => setConfirmClear(true)} className="text-muted underline-offset-4 hover:text-error hover:underline">Vider</button>
                     )}
                   </div>
                 </div>

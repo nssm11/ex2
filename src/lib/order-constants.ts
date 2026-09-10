@@ -14,4 +14,4 @@ export const ALLOWED_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
   returned: [],
 };
 export const PAYMENT_LABELS = { cod: "Paiement à la livraison", bank_transfer: "Virement bancaire", card: "Carte bancaire", gift_card: "Carte cadeau" } as const;
-export const SHIPPING_LABELS = { standard: "Livraison standard", express: "Livraison express", pickup: "Click & Collect" } as const;
+export const SHIPPING_LABELS = { standard: "Livraison standard", express: "Livraison express", pickup: "Retrait en boutique" } as const;

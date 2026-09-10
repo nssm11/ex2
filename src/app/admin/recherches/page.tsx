@@ -11,8 +11,8 @@ export default async function AdminSearch() {
   return (
     <AdminPage title="Recherches" sub="Ce que vos clients cherchent">
       <div className="grid gap-8 lg:grid-cols-2">
-        <div><h2 className="mb-3 text-[10px] uppercase tracking-[0.16em] text-admin-muted">Requêtes populaires</h2><Table head={["Requête", "Occurrences", "Résultats moy."]}>{top.map((r) => <tr key={r.q}><td className="px-4 py-2.5">{r.q}</td><td className="px-4 py-2.5 tabular-nums">{r.n}</td><td className="px-4 py-2.5 tabular-nums">{r.avg}</td></tr>)}</Table>{top.length === 0 && <p className="p-4 text-sm text-admin-muted">Aucune donnée.</p>}</div>
-        <div><h2 className="mb-3 text-[10px] uppercase tracking-[0.16em] text-admin-muted">Sans résultat (opportunités)</h2><Table head={["Requête", "Occurrences"]}>{zero.map((r) => <tr key={r.q}><td className="px-4 py-2.5">{r.q}</td><td className="px-4 py-2.5 tabular-nums">{r.n}</td></tr>)}</Table>{zero.length === 0 && <p className="p-4 text-sm text-admin-muted">Aucune donnée.</p>}</div>
+        <div><h2 className="mb-3 text-[10px] tracking-[0.02em] text-admin-muted">Requêtes populaires</h2><Table head={["Requête", "Occurrences", "Résultats moy."]}>{top.map((r) => <tr key={r.q}><td className="px-4 py-2.5">{r.q}</td><td className="px-4 py-2.5 tabular-nums">{r.n}</td><td className="px-4 py-2.5 tabular-nums">{r.avg}</td></tr>)}</Table>{top.length === 0 && <p className="p-4 text-sm text-admin-muted">Aucune donnée.</p>}</div>
+        <div><h2 className="mb-3 text-[10px] tracking-[0.02em] text-admin-muted">Sans résultat (opportunités)</h2><Table head={["Requête", "Occurrences"]}>{zero.map((r) => <tr key={r.q}><td className="px-4 py-2.5">{r.q}</td><td className="px-4 py-2.5 tabular-nums">{r.n}</td></tr>)}</Table>{zero.length === 0 && <p className="p-4 text-sm text-admin-muted">Aucune donnée.</p>}</div>
       </div>
     </AdminPage>
   );

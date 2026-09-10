@@ -17,7 +17,7 @@ export default async function AdminClients({ searchParams }: { searchParams: Pro
       // eslint-disable-next-line @next/next/no-html-link-for-pages
       <a href="/api/admin/export/customers" className={abtnGhost}><DownloadIcon size={14} /> CSV</a>}>
       <form className="mb-4 flex gap-2"><input name="q" defaultValue={q} placeholder="Nom, e-mail, téléphone…" className={`${afield} max-w-xs`} /><button className={abtnGhost}>Rechercher</button></form>
-      <Table head={["Client", "Contact", "Rôle", "Commandes", "Total", "Inscrit"]}>{rows.map((u) => <tr key={u.id} className="hover:bg-admin-panel"><td className="px-4 py-3"><Link href={`/admin/clients/${u.id}`} className="hover:underline">{u.first} {u.last}</Link></td><td className="px-4 py-3 text-xs text-admin-muted">{u.email}<br />{u.phone}</td><td className="px-4 py-3 text-xs uppercase tracking-[0.12em]">{u.role}</td><td className="px-4 py-3 tabular-nums">{u.n}</td><td className="px-4 py-3 tabular-nums">{formatDT(u.spent)}</td><td className="px-4 py-3 text-xs text-admin-muted">{formatDate(u.at)}</td></tr>)}</Table>
+      <Table head={["Client", "Contact", "Rôle", "Commandes", "Total", "Inscrit"]}>{rows.map((u) => <tr key={u.id} className="hover:bg-admin-panel"><td className="px-4 py-3"><Link href={`/admin/clients/${u.id}`} className="hover:underline">{u.first} {u.last}</Link></td><td className="px-4 py-3 text-xs text-admin-muted">{u.email}<br />{u.phone}</td><td className="px-4 py-3 text-xs tracking-[0.02em]">{u.role}</td><td className="px-4 py-3 tabular-nums">{u.n}</td><td className="px-4 py-3 tabular-nums">{formatDT(u.spent)}</td><td className="px-4 py-3 text-xs text-admin-muted">{formatDate(u.at)}</td></tr>)}</Table>
     </AdminPage>
   );
 }

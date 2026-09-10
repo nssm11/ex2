@@ -35,7 +35,7 @@ export default async function MarquesPage() {
                 </div>
                 <div>
                   <p className="mb-4 line-clamp-3 max-w-sm text-xs leading-relaxed text-muted">{b.story}</p>
-                  <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-2"><span className="text-champagne-2">{b.country}</span><span className="h-px w-6 bg-stone-2" /> Découvrir <ArrowRightIcon size={11} className="transition-transform duration-500 group-hover:translate-x-1" /></p>
+                  <p className="flex items-center gap-2 text-[10px] font-bold tracking-[0.02em] text-muted-2"><span className="text-champagne-2">{b.country}</span><span className="h-px w-6 bg-stone-2" /> Découvrir <ArrowRightIcon size={11} className="transition-transform duration-500 group-hover:translate-x-1" /></p>
                 </div>
               </Link>
             ))}
@@ -55,7 +55,7 @@ export default async function MarquesPage() {
                   <li key={b.id}>
                     <Link href={`/marque/${b.slug}`} className="group flex items-baseline justify-between gap-3 border-b border-stone/50 py-3">
                       <span className="text-[15px] text-charcoal transition-colors group-hover:text-ink">{b.name}</span>
-                      <span className="shrink-0 text-[10px] uppercase tracking-[0.14em] text-muted-2">{b.country}</span>
+                      <span className="shrink-0 text-[10px] tracking-[0.02em] text-muted-2">{b.country}</span>
                     </Link>
                   </li>
                 ))}

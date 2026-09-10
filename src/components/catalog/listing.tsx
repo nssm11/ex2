@@ -21,7 +21,12 @@ export function parseFilters(sp: SP): Partial<ListFilters> {
   };
 }
 
-export async function Listing({ base, sp, hideBrands, hideConcerns, basePath }: { base: ListFilters; sp: SP; hideBrands?: boolean; hideConcerns?: boolean; basePath: string }) {
+export async function Listing({
+  base, sp, hideBrands, hideConcerns, basePath, emptyTitle, emptyDescription, emptyAction,
+}: {
+  base: ListFilters; sp: SP; hideBrands?: boolean; hideConcerns?: boolean; basePath: string;
+  emptyTitle?: string; emptyDescription?: string; emptyAction?: { href: string; label: string };
+}) {
   const filters = { ...base, ...parseFilters(sp) };
   const [{ items, total, page, pages }, facets, user] = await Promise.all([listProducts(filters), facetsFor(base), getCurrentUser()]);
   const wished = user ? (await db.select({ id: wishlistItems.productId }).from(wishlistItems).where(eq(wishlistItems.userId, user.id))).map((w) => w.id) : [];
@@ -36,7 +41,12 @@ export async function Listing({ base, sp, hideBrands, hideConcerns, basePath }: 
           <SortSelect />
         </div>
         {items.length === 0 ? (
-          <EmptyState icon={<SearchIcon size={22} />} title="Aucun produit ne correspond" description="Essayez d'élargir vos filtres ou explorez un autre univers." action={{ href: basePath, label: "Réinitialiser les filtres" }} />
+          <EmptyState
+            icon={<SearchIcon size={22} />}
+            title={emptyTitle ?? "Aucun produit ne correspond"}
+            description={emptyDescription ?? "Essayez d'élargir vos filtres ou explorez un autre univers."}
+            action={emptyAction ?? { href: basePath, label: "Réinitialiser les filtres" }}
+          />
         ) : (
           <>
             <ProductGrid items={items} wishedIds={wished} isAuthed={!!user} />

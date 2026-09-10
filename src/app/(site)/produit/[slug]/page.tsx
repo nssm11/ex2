@@ -6,7 +6,9 @@ import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { wishlistItems } from "@/db/schema";
 import { getCurrentUser } from "@/lib/auth";
-import { getProductBySlug, getRelated } from "@/lib/catalog";
+import { getProductBySlug } from "@/lib/catalog";
+import { getRelatedProducts } from "@/lib/recommendations";
+import { isOutOfStock, safeStock, stockLabel } from "@/lib/stock";
 import { SITE_URL } from "@/lib/env";
 import { discountPercent, formatDT, formatDTShort } from "@/lib/money";
 import { formatDate } from "@/lib/utils";
@@ -32,11 +34,12 @@ export default async function ProduitPage({ params }: { params: Promise<{ slug: 
   const [p, user] = await Promise.all([getProductBySlug(slug), getCurrentUser()]);
   if (!p) notFound();
   const [related, wishedRow] = await Promise.all([
-    getRelated(p.id, p.categoryId, p.universeId, 4),
+    getRelatedProducts(p.id, 4),
     user ? db.select().from(wishlistItems).where(and(eq(wishlistItems.userId, user.id), eq(wishlistItems.productId, p.id))).limit(1) : Promise.resolve([]),
   ]);
   const pct = discountPercent(p.priceMillimes, p.compareAtMillimes);
-  const out = p.stock <= 0;
+  const stock = safeStock(p.stock);
+  const out = isOutOfStock(stock);
   const jsonLd = {
     "@context": "https://schema.org", "@type": "Product", name: p.name, image: p.image ? [`${SITE_URL}${p.image}`] : [], description: p.shortDescription, sku: p.sku, brand: p.brand ? { "@type": "Brand", name: p.brand.name } : undefined,
     offers: { "@type": "Offer", url: `${SITE_URL}/produit/${p.slug}`, priceCurrency: "TND", price: (p.priceMillimes / 1000).toFixed(3), availability: p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock", itemCondition: "https://schema.org/NewCondition" },
@@ -59,10 +62,11 @@ export default async function ProduitPage({ params }: { params: Promise<{ slug: 
               <div className="relative aspect-square overflow-hidden bg-stone lg:sticky lg:top-28">
                 {p.image && <Image src={p.image} alt={`${p.name} — ${p.brand?.name ?? "Cléopâtre"}`} fill priority sizes="(max-width:1024px) 100vw, 58vw" className={`object-cover transition-transform duration-[1600ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${out ? "opacity-70" : ""}`} />}
                 <div className="absolute left-5 top-5 flex flex-col items-start gap-2">
+                  {out && <Badge tone="error">Épuisé</Badge>}
                   {pct > 0 && <Badge tone="ink">-{pct} %</Badge>}
-                  {p.isNew && !pct && <Badge tone="accent">Nouveau</Badge>}
+                  {p.isNew && !pct && !out && <Badge tone="accent">Nouveau</Badge>}
                 </div>
-                <p className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-paper/80 px-4 py-2 text-[9px] font-bold uppercase tracking-[0.2em] text-muted backdrop-blur-sm">
+                <p className="absolute bottom-0 left-0 right-0 flex items-center justify-between bg-paper/80 px-4 py-2 text-[9px] font-bold tracking-[0.02em] text-muted backdrop-blur-sm">
                   <span>{p.brand?.name ?? "Cléopâtre"} · Réf. {p.sku}</span>
                   <span>{p.volume}</span>
                 </p>
@@ -73,7 +77,7 @@ export default async function ProduitPage({ params }: { params: Promise<{ slug: 
             <div className="lg:col-span-5">
               <div className="lg:sticky lg:top-28">
                 {p.brand && (
-                  <Link href={`/marque/${p.brand.slug}`} className="group inline-flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.22em] text-muted transition-colors hover:text-ink">
+                  <Link href={`/marque/${p.brand.slug}`} className="group inline-flex items-center gap-3 text-[10px] font-bold tracking-[0.02em] text-muted transition-colors hover:text-ink">
                     <span className="font-display text-base italic text-champagne-2">{p.brand.name}</span>
                   </Link>
                 )}
@@ -81,7 +85,7 @@ export default async function ProduitPage({ params }: { params: Promise<{ slug: 
                 {p.ratingCount > 0 && (
                   <a href="#avis" className="mt-4 inline-flex items-center gap-2"><Stars value={p.ratingAvg / 100} count={p.ratingCount} size={13} /><span className="text-xs text-muted">· {p.ratingCount} avis</span></a>
                 )}
-                <div className="mt-6 flex items-baseline gap-3 border-y border-stone py-5">
+                <div className="mt-6 flex flex-wrap items-baseline gap-3 border-y border-stone py-5">
                   <span className="text-[1.7rem] font-medium tabular-nums tracking-tight text-ink">{formatDT(p.priceMillimes)}</span>
                   {pct > 0 && p.compareAtMillimes && (
                     <span className="flex items-baseline gap-2">
@@ -89,6 +93,11 @@ export default async function ProduitPage({ params }: { params: Promise<{ slug: 
                       <Badge tone="success">Économisez {formatDTShort(p.compareAtMillimes - p.priceMillimes)}</Badge>
                     </span>
                   )}
+                  {/* The stock state is stated here too, so a sold-out product
+                      never looks buyable before the button is reached. */}
+                  <span className={`ml-auto text-[13px] ${out ? "text-error" : "text-muted"}`} aria-live="polite">
+                    {out ? "Rupture de stock" : stockLabel(stock, p.lowStockThreshold)}
+                  </span>
                 </div>
 
                 <p className="mt-6 text-[15px] leading-[1.8] text-charcoal">{p.shortDescription}</p>
@@ -98,7 +107,7 @@ export default async function ProduitPage({ params }: { params: Promise<{ slug: 
                     <p className="eyebrow mb-3">Répond à vos besoins</p>
                     <ul className="flex flex-wrap gap-2">
                       {p.concerns.map((c) => (
-                        <li key={c.concernId}><Link href={`/besoin/${c.concern.slug}`} className="inline-flex min-h-9 items-center border border-stone-2 px-3.5 text-[10px] font-bold uppercase tracking-[0.16em] text-charcoal transition-colors hover:border-ink hover:bg-ink hover:text-paper">{c.concern.name}</Link></li>
+                        <li key={c.concernId}><Link href={`/besoin/${c.concern.slug}`} className="inline-flex min-h-9 items-center border border-stone-2 px-3.5 text-[10px] font-bold tracking-[0.02em] text-charcoal transition-colors hover:border-ink hover:bg-ink hover:text-paper">{c.concern.name}</Link></li>
                       ))}
                     </ul>
                   </div>
@@ -109,7 +118,7 @@ export default async function ProduitPage({ params }: { params: Promise<{ slug: 
                 <div className="mt-9 divide-y divide-stone border-y border-stone">
                   {[["Description", p.description], ["Composition & ingrédients", p.ingredients], ["Conseils d'utilisation", p.howToUse]].map(([t, body], i) => body ? (
                     <details key={t} open={i === 0} className="group py-1">
-                      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-ink">
+                      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between text-[11px] font-bold tracking-[0.02em] text-ink">
                         {t}<span aria-hidden="true" className="pl-4 font-display text-2xl font-normal text-muted transition-transform duration-500 group-open:rotate-45">+</span>
                       </summary>
                       <p className="pb-5 text-[14px] leading-[1.85] text-charcoal">{body}</p>
@@ -166,7 +175,7 @@ export default async function ProduitPage({ params }: { params: Promise<{ slug: 
       {related.length > 0 && (
         <section className="border-b border-stone bg-paper">
           <div className="container-lux py-section-sm">
-            <SectionHeading index="→" eyebrow="Complétez votre routine" title="Vous aimerez aussi" />
+            <SectionHeading index="→" eyebrow="Complétez votre routine" title="Suggestions pour ce produit" />
             <div className="mt-12"><ProductGrid items={related} isAuthed={!!user} priorityCount={0} /></div>
           </div>
         </section>

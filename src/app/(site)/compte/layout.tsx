@@ -23,8 +23,8 @@ export default async function CompteLayout({ children }: { children: ReactNode }
           </div>
           <div className="flex flex-wrap items-center gap-4">
             <span className="inline-flex items-center gap-2 border border-paper/25 px-4 py-2.5 text-xs text-paper/85"><span className="font-display text-lg italic text-champagne-3">{user.loyaltyPoints}</span> points fidélité</span>
-            {staff && <Link href="/admin" className="inline-flex min-h-11 items-center gap-2 border border-champagne-3 px-4 text-[11px] font-bold uppercase tracking-[0.16em] text-champagne-3 transition-colors hover:bg-champagne-3 hover:text-noir"><ExternalIcon size={14} /> Administration</Link>}
-            <form action={logoutAction}><button className="inline-flex min-h-11 items-center gap-2 px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-paper/60 transition-colors hover:text-paper"><LogoutIcon size={14} /> Quitter</button></form>
+            {staff && <Link href="/admin" className="inline-flex min-h-11 items-center gap-2 border border-champagne-3 px-4 text-[11px] font-bold tracking-[0.02em] text-champagne-3 transition-colors hover:bg-champagne-3 hover:text-noir"><ExternalIcon size={14} /> Administration</Link>}
+            <form action={logoutAction}><button className="inline-flex min-h-11 items-center gap-2 px-3 text-[11px] font-bold tracking-[0.02em] text-paper/60 transition-colors hover:text-paper"><LogoutIcon size={14} /> Quitter</button></form>
           </div>
         </div>
       </section>

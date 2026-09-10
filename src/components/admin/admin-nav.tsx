@@ -55,7 +55,7 @@ export function AdminNav({ role }: { role: string }) {
             const active = isActive(it.href);
             return (
               <li key={it.href} className="shrink-0">
-                <Link href={it.href} aria-current={active ? "page" : undefined} className={cn("flex min-h-10 items-center gap-2 border px-3 text-[11px] font-bold uppercase tracking-[0.12em] transition-colors",
+                <Link href={it.href} aria-current={active ? "page" : undefined} className={cn("flex min-h-10 items-center gap-2 border px-3 text-[11px] font-bold tracking-[0.02em] transition-colors",
                   active ? "border-admin-gold bg-admin-gold text-noir" : "border-admin-border text-admin-muted hover:text-admin-text")}>
                   <it.i size={13} />{it.l}
                 </Link>
@@ -71,7 +71,7 @@ export function AdminNav({ role }: { role: string }) {
           if (!items.length) return null;
           return (
             <div key={g.label}>
-              <p className="mb-2 px-3 text-[9px] font-bold uppercase tracking-[0.26em] text-admin-muted/70">{g.label}</p>
+              <p className="mb-2 px-3 text-[9px] font-bold tracking-[0.02em] text-admin-muted/70">{g.label}</p>
               <ul className="space-y-0.5">
                 {items.map((it) => {
                   const active = isActive(it.href);

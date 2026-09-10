@@ -115,7 +115,7 @@ export function CheckoutFlow({ user, savedAddresses, stores }: { user: SafeUser 
                   {([
                     { v: "standard", l: "Livraison standard", d: deliveryEstimate(addr.governorate, "standard"), p: shippingFor(subtotal - discount, "standard"), i: TruckIcon },
                     { v: "express", l: "Livraison express", d: deliveryEstimate(addr.governorate, "express"), p: EXPRESS_SHIPPING_FEE, i: TruckIcon },
-                    { v: "pickup", l: "Click & Collect", d: "Retrait sous 2 h en boutique", p: 0, i: StoreIcon },
+                    { v: "pickup", l: "Retrait en boutique", d: "Retrait sous 2 h en boutique", p: 0, i: StoreIcon },
                   ] as const).map((o) => (
                     <label key={o.v} className={`flex min-h-16 cursor-pointer items-center gap-4 border p-4 transition-colors ${shipping === o.v ? "border-ink bg-cream" : "border-stone hover:border-sand-2"}`}>
                       <input type="radio" name="shipping" value={o.v} checked={shipping === o.v} onChange={() => setShipping(o.v)} className="sr-only" />
@@ -147,7 +147,7 @@ export function CheckoutFlow({ user, savedAddresses, stores }: { user: SafeUser 
                     </label>
                   ))}
                 </div>
-                <div><p className="eyebrow mb-2">Code promo</p><div className="flex"><input value={promoInput} onChange={(e) => setPromoInput(e.target.value.toUpperCase())} placeholder="BIENVENUE10" className="field border-r-0 font-mono uppercase" aria-label="Code promo" /><button type="button" onClick={applyPromo} disabled={pending || !promoInput} className="btn-secondary shrink-0">Appliquer</button></div>
+                <div><p className="eyebrow mb-2">Code promo</p><div className="flex"><input value={promoInput} onChange={(e) => setPromoInput(e.target.value.toUpperCase())} placeholder="BIENVENUE10" className="field border-r-0 font-mono" aria-label="Code promo" /><button type="button" onClick={applyPromo} disabled={pending || !promoInput} className="btn-secondary shrink-0">Appliquer</button></div>
                   <AnimatePresence>{promo && <motion.p initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-2 flex items-center gap-2 text-sm text-success"><CheckIcon size={14} /> {promo.label}{promo.discount > 0 && ` · −${formatDT(promo.discount)}`}<button type="button" onClick={() => { setPromo(null); setPromoInput(""); cart.setPromoCode(""); }} className="ml-2 text-xs text-muted underline">Retirer</button></motion.p>}</AnimatePresence></div>
               </motion.section>
             )}

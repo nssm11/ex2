@@ -16,7 +16,7 @@ export function AuthShell({ title, kicker, children }: { title: ReactNode; kicke
             <LogoMark size={32} className="text-champagne-3" />
             <span className="flex flex-col leading-none">
               <span className="font-display text-2xl">Cléopâtre</span>
-              <span className="mt-1 text-[8px] font-bold uppercase tracking-[0.34em] text-paper/50">Espace Santé Beauté</span>
+              <span className="mt-1 text-[8px] font-bold tracking-[0.02em] text-paper/50">Espace Santé Beauté</span>
             </span>
           </Link>
           <div className="max-w-md">

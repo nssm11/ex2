@@ -56,7 +56,7 @@ export default async function ConfirmationPage({ params, searchParams }: { param
               <li key={i.id} className="flex gap-4 py-4">
                 <div className="relative h-20 w-16 shrink-0 bg-stone">{i.image && <Image src={i.image} alt="" fill sizes="64px" className="object-cover" />}</div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-[10px] uppercase tracking-[0.16em] text-muted">{i.brandName}</p>
+                  <p className="text-[10px] tracking-[0.02em] text-muted">{i.brandName}</p>
                   <p className="text-sm text-ink">{i.name}</p>
                   <p className="text-xs text-muted">{i.quantity} × {formatDT(i.unitPriceMillimes)}</p>
                 </div>

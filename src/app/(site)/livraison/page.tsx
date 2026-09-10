@@ -7,7 +7,7 @@ export default function LivraisonPage() {
   const rows = [
     { i: <TruckIcon size={22} />, t: "Livraison standard", d: `${formatDTShort(STANDARD_SHIPPING_FEE)} · offerte dès ${formatDTShort(FREE_SHIPPING_THRESHOLD)}. 24–48 h Grand Tunis, 48–72 h autres gouvernorats.` },
     { i: <PackageIcon size={22} />, t: "Livraison express", d: `${formatDTShort(EXPRESS_SHIPPING_FEE)} · sous 24 h sur le Grand Tunis pour toute commande passée avant 14 h.` },
-    { i: <StoreIcon size={22} />, t: "Click & Collect", d: "Gratuit · prête sous 2 h à Ezzahra ou Hammam-Lif. Nous vous prévenons par téléphone." },
+    { i: <StoreIcon size={22} />, t: "Retrait en boutique", d: "Gratuit · prête sous 2 h à Ezzahra ou Hammam-Lif. Nous vous prévenons par téléphone." },
     { i: <RefreshIcon size={22} />, t: "Retours", d: "7 jours après réception pour tout produit non ouvert. Demande depuis votre compte, remboursement ou avoir sous 5 jours." },
   ];
   return (

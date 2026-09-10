@@ -94,7 +94,7 @@ export function Header({ groups, mobileGroups, user, wishlistCount }: {
               <span className="font-display text-[22px] font-medium tracking-[0.02em] lg:text-[26px]">
                 Cléopâtre
               </span>
-              <span className="mt-1 hidden text-[8px] font-bold uppercase tracking-[0.34em] text-muted sm:block">
+              <span className="mt-1 hidden text-[8px] font-bold tracking-[0.02em] text-muted sm:block">
                 Espace Santé Beauté
               </span>
             </span>

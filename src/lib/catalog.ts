@@ -1,8 +1,9 @@
 import "server-only";
-import { and, asc, desc, eq, gte, ilike, inArray, isNotNull, lte, or, sql, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNotNull, lte, sql, type AnyColumn, type SQL } from "drizzle-orm";
 import { cache } from "react";
 import { db } from "@/db";
 import { brands, categories, concerns, productConcerns, products, reviews } from "@/db/schema";
+import { ACCENTED, FOLDED, foldText, likePattern, searchTokens } from "./text";
 
 /**
  * Single source of truth for "may this product be seen by the public?".
@@ -59,27 +60,42 @@ export type ListFilters = {
 };
 
 /**
- * Build a LIKE pattern that is safe against `%`/`_` (LIKE wildcards) in the
- * user's input and matches anywhere in the text. Pass the result through
- * `unaccent(...)` on both sides of the comparison for French accent-insensitive
- * search (e.g. "serum" finds "Sérum"). `unaccent` is enabled at DB startup.
+ * Accent-insensitive search without the `unaccent` extension.
+ *
+ * `unaccent` is not created by `drizzle-kit push` and is often unavailable on a
+ * managed database, and then every search raised
+ * `function unaccent(character varying) does not exist` — which is why the
+ * search bar appeared broken. The fold is done with `translate` instead: the
+ * tables in `lib/text` are applied to the user input in JS and to the columns
+ * in SQL, so "serum" finds "Sérum" on any PostgreSQL.
  */
-function likePattern(q: string): string {
-  const escaped = q.trim().replace(/[\\%_]/g, (m) => `\\${m}`);
-  return `%${escaped}%`;
+type TextLike = SQL | AnyColumn;
+/** SQL twin of `foldText` from `lib/text` — same tables, applied to a column. */
+const foldColumn = (col: TextLike): SQL =>
+  sql`lower(translate(coalesce(${col}::text, ''), ${ACCENTED}, ${FOLDED}))`;
+
+/** Everything a query may match against, folded into one haystack. */
+function searchHaystack(): SQL {
+  return sql`${foldColumn(products.name)} || ' ' || ${foldColumn(products.shortDescription)} || ' ' ||
+    ${foldColumn(sql`(select b.name from ${brands} b where b.id = ${products.brandId})`)} || ' ' ||
+    ${foldColumn(sql`(select c.name from ${categories} c where c.id = ${products.categoryId})`)} || ' ' ||
+    ${foldColumn(sql`(select u.name from ${categories} u where u.id = ${products.universeId})`)} || ' ' ||
+    ${foldColumn(products.sku)}`;
+}
+
+/** AND across tokens, so "crème solaire" is not "every cream in the shop". */
+function searchWhere(q: string): SQL | undefined {
+  const tokens = searchTokens(q);
+  if (!tokens.length) return undefined;
+  const haystack = searchHaystack();
+  return sql`(${sql.join(tokens.map((t) => sql`${haystack} LIKE ${likePattern(t)}`), sql` AND `)})`;
 }
 
 function baseWhere(f: ListFilters): SQL[] {
   const w: SQL[] = [publiclyVisible];
   if (f.q) {
-    const pat = likePattern(f.q);
-    w.push(
-      or(
-        sql`unaccent(${products.name}) ILIKE unaccent(${pat})`,
-        sql`unaccent(${products.shortDescription}) ILIKE unaccent(${pat})`,
-        sql`unaccent(${brands.name}) ILIKE unaccent(${pat})`,
-      )!,
-    );
+    const match = searchWhere(f.q);
+    if (match) w.push(match);
   }
   if (f.universeId) w.push(eq(products.universeId, f.universeId));
   if (f.categoryId) w.push(eq(products.categoryId, f.categoryId));
@@ -102,14 +118,31 @@ function baseWhere(f: ListFilters): SQL[] {
   return w;
 }
 
-function orderBy(sort: SortKey = "featured") {
+function orderBy(sort: SortKey = "featured", q?: string): SQL[] {
   switch (sort) {
     case "price_asc": return [asc(products.priceMillimes)];
     case "price_desc": return [desc(products.priceMillimes)];
     case "newest": return [desc(products.createdAt)];
     case "rating": return [desc(products.ratingAvg), desc(products.ratingCount)];
     case "bestsellers": return [desc(products.salesCount)];
-    default: return [desc(products.isFeatured), desc(products.salesCount), asc(products.name)];
+    default: {
+      // With a search term and no explicit sort, relevance beats "featured":
+      // the best match must come first or the results look random.
+      if (q?.trim()) {
+        const folded = foldText(q.trim());
+        const nameFolded = foldColumn(products.name);
+        return [
+          sql`case when ${nameFolded} = ${folded} then 0
+                   when ${nameFolded} like ${`${folded}%`} then 1
+                   when ${nameFolded} like ${`% ${folded}%`} then 2
+                   else 3 end`,
+          sql`case when ${products.stock} > 0 then 0 else 1 end`,
+          desc(products.salesCount),
+          asc(products.name),
+        ];
+      }
+      return [desc(products.isFeatured), desc(products.salesCount), asc(products.name)];
+    }
   }
 }
 
@@ -119,7 +152,7 @@ export async function listProducts(f: ListFilters) {
   const where = and(...baseWhere(f));
   const [items, countRow] = await Promise.all([
     db.select(productCardSelect).from(products).leftJoin(brands, eq(brands.id, products.brandId)).where(where)
-      .orderBy(...orderBy(f.sort)).limit(perPage).offset((page - 1) * perPage),
+      .orderBy(...orderBy(f.sort, f.q)).limit(perPage).offset((page - 1) * perPage),
     db.select({ n: sql<number>`count(*)::int` }).from(products).leftJoin(brands, eq(brands.id, products.brandId)).where(where),
   ]);
   const total = countRow[0]?.n ?? 0;
@@ -150,14 +183,6 @@ export const getProductBySlug = cache(async (slug: string) => {
   const approved = await db.select().from(reviews).where(and(eq(reviews.productId, p.id), eq(reviews.status, "approved"))).orderBy(desc(reviews.createdAt)).limit(20);
   return { ...p, reviews: approved };
 });
-
-export async function getRelated(productId: number, categoryId: number | null, universeId: number | null, limit = 4) {
-  const w: SQL[] = [publiclyVisible, sql`${products.id} <> ${productId}`];
-  if (categoryId) w.push(eq(products.categoryId, categoryId));
-  else if (universeId) w.push(eq(products.universeId, universeId));
-  const rows = await db.select(productCardSelect).from(products).leftJoin(brands, eq(brands.id, products.brandId)).where(and(...w)).orderBy(desc(products.salesCount)).limit(limit);
-  return rows as ProductCard[];
-}
 
 export async function getFeatured(limit = 8) {
   const rows = await db.select(productCardSelect).from(products).leftJoin(brands, eq(brands.id, products.brandId))
@@ -195,16 +220,22 @@ export const getConcernBySlug = cache(async (slug: string) => db.query.concerns.
 
 export async function quickSearch(q: string, limit = 6) {
   if (q.trim().length < 2) return [] as ProductCard[];
-  const pat = likePattern(q);
+  const match = searchWhere(q);
+  if (!match) return [] as ProductCard[];
+  const folded = foldText(q.trim());
+  const nameFolded = foldColumn(products.name);
   const rows = await db.select(productCardSelect).from(products).leftJoin(brands, eq(brands.id, products.brandId))
-    .where(and(
-      publiclyVisible,
-      or(
-        sql`unaccent(${products.name}) ILIKE unaccent(${pat})`,
-        sql`unaccent(${brands.name}) ILIKE unaccent(${pat})`,
-        sql`unaccent(${products.shortDescription}) ILIKE unaccent(${pat})`,
-      ),
-    ))
-    .orderBy(desc(products.salesCount)).limit(limit);
+    .where(and(publiclyVisible, match))
+    .orderBy(
+      // Relevance first: exact name, then name prefix, then a word boundary,
+      // then availability, then popularity. Accent- and case-insensitive.
+      sql`case when ${nameFolded} = ${folded} then 0
+               when ${nameFolded} like ${`${folded}%`} then 1
+               when ${nameFolded} like ${`% ${folded}%`} then 2
+               else 3 end`,
+      sql`case when ${products.stock} > 0 then 0 else 1 end`,
+      desc(products.salesCount),
+      asc(products.name),
+    ).limit(limit);
   return rows as ProductCard[];
 }

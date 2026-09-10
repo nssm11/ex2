@@ -7,7 +7,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { formatDT } from "@/lib/money";
 import { formatDateTime, formatDate } from "@/lib/utils";
 import { AdminPage, KPI, Panel, StatusBadge, Table, SectionLabel, abtnGhost } from "@/components/admin/ui";
-import { DownloadIcon, PackageIcon, PlusIcon, StarIcon, ChatIcon } from "@/components/icons";
+import { DownloadIcon, StarIcon, ChatIcon } from "@/components/icons";
 export const dynamic = "force-dynamic";
 export default async function AdminDashboard() {
   // Do not rely on the layout having redirected: Next.js renders the page
@@ -35,16 +35,9 @@ export default async function AdminDashboard() {
       // CSV Route Handler (Content-Disposition: attachment), not a page.
       // eslint-disable-next-line @next/next/no-html-link-for-pages
       <a href="/api/admin/export/orders" className={abtnGhost}><DownloadIcon size={13} /> Exporter les commandes</a>}>
-      {/* Quick actions */}
-      <div className="mb-8 flex flex-wrap items-center gap-2">
-        <span className="mr-1 text-[10px] font-bold uppercase tracking-[0.2em] text-admin-muted">Actions rapides</span>
-        <Link href="/admin/produits/nouveau" className="inline-flex min-h-9 items-center gap-1.5 border border-admin-border px-3 text-[10px] font-bold uppercase tracking-[0.14em] text-admin-text transition-colors hover:border-admin-gold hover:text-admin-gold"><PlusIcon size={12} /> Produit</Link>
-        <Link href="/admin/commandes" className="inline-flex min-h-9 items-center gap-1.5 border border-admin-border px-3 text-[10px] font-bold uppercase tracking-[0.14em] text-admin-text transition-colors hover:border-admin-gold hover:text-admin-gold"><PackageIcon size={12} /> Commandes</Link>
-        <Link href="/admin/avis" className="inline-flex min-h-9 items-center gap-1.5 border border-admin-border px-3 text-[10px] font-bold uppercase tracking-[0.14em] text-admin-text transition-colors hover:border-admin-gold hover:text-admin-gold"><StarIcon size={12} /> Modération</Link>
-        <Link href="/admin/support" className="inline-flex min-h-9 items-center gap-1.5 border border-admin-border px-3 text-[10px] font-bold uppercase tracking-[0.14em] text-admin-text transition-colors hover:border-admin-gold hover:text-admin-gold"><ChatIcon size={12} /> Support</Link>
-      </div>
-
-      {/* KPI — 30 days */}
+      {/* KPI — 30 days. The old "Actions rapides" strip only duplicated the
+          sidebar navigation, which is one click away and always visible; the
+          dashboard therefore opens straight onto the numbers. */}
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <KPI label="Chiffre d'affaires · 30 j" value={formatDT(kpi.rev)} sub={`${kpi.n} commandes passées`} />
         <KPI label="Panier moyen" value={formatDT(kpi.avg)} sub="30 derniers jours" />
@@ -69,7 +62,7 @@ export default async function AdminDashboard() {
               ))}
             </ul>
           )}
-          <Link href="/admin/commandes?status=pending" className="block border-t border-admin-border px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-admin-gold transition-colors hover:bg-admin-panel-2">Toutes les commandes en attente →</Link>
+          <Link href="/admin/commandes?status=pending" className="block border-t border-admin-border px-5 py-3 text-[11px] font-bold tracking-[0.02em] text-admin-gold transition-colors hover:bg-admin-panel-2">Toutes les commandes en attente →</Link>
         </Panel>
 
         <Panel title="Alertes stock" className="p-0">
@@ -87,7 +80,7 @@ export default async function AdminDashboard() {
               ))}
             </ul>
           )}
-          <Link href="/admin/stock" className="block border-t border-admin-border px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-admin-gold transition-colors hover:bg-admin-panel-2">Gérer l&apos;inventaire →</Link>
+          <Link href="/admin/stock" className="block border-t border-admin-border px-5 py-3 text-[11px] font-bold tracking-[0.02em] text-admin-gold transition-colors hover:bg-admin-panel-2">Gérer l&apos;inventaire →</Link>
         </Panel>
 
         <Panel title="Modération & support" className="p-0">
@@ -96,7 +89,7 @@ export default async function AdminDashboard() {
             <li><Link href="/admin/support" className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-admin-panel-2"><span className="flex items-center gap-3"><ChatIcon size={15} className="text-admin-gold" /> Tickets ouverts</span><span className="rounded-sm bg-admin-border px-2 py-0.5 text-xs tabular-nums">{openTickets.n}</span></Link></li>
             <li className="px-5 py-4 text-xs leading-relaxed text-admin-muted">{isAdmin ? "Vous disposez des droits complets sur la maison." : "Compte support — accès limité aux contenus sensibles."}</li>
           </ul>
-          <Link href={isAdmin ? "/admin/audit" : "/admin/recherches"} className="block border-t border-admin-border px-5 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-admin-gold transition-colors hover:bg-admin-panel-2">{isAdmin ? "Consulter l'audit →" : "Voir les recherches →"}</Link>
+          <Link href={isAdmin ? "/admin/audit" : "/admin/recherches"} className="block border-t border-admin-border px-5 py-3 text-[11px] font-bold tracking-[0.02em] text-admin-gold transition-colors hover:bg-admin-panel-2">{isAdmin ? "Consulter l'audit →" : "Voir les recherches →"}</Link>
         </Panel>
       </div>
 

@@ -45,7 +45,7 @@ export function DesktopNavigation({ groups }: { groups: MegaGroup[] }) {
         <Link
           href="/boutique?sort=newest"
           onMouseEnter={() => setActiveId(null)}
-          className="relative whitespace-nowrap py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-charcoal transition-colors hover:text-ink"
+          className="relative whitespace-nowrap py-3 text-[11px] font-semibold tracking-[0.02em] text-charcoal transition-colors hover:text-ink"
         >
           Nouveautés
         </Link>
@@ -58,7 +58,7 @@ export function DesktopNavigation({ groups }: { groups: MegaGroup[] }) {
             onClick={() => { window.location.href = g.href; }}
             aria-expanded={activeId === g.id}
             aria-haspopup="true"
-            className={`group relative whitespace-nowrap py-3 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors ${
+            className={`group relative whitespace-nowrap py-3 text-[11px] font-semibold tracking-[0.02em] transition-colors ${
               activeId === g.id ? "text-champagne-2" : "text-charcoal hover:text-ink"
             }`}
           >
@@ -73,7 +73,7 @@ export function DesktopNavigation({ groups }: { groups: MegaGroup[] }) {
         <Link
           href="/promotions"
           onMouseEnter={() => setActiveId(null)}
-          className="relative whitespace-nowrap py-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-champagne-2 transition-colors hover:text-ink"
+          className="relative whitespace-nowrap py-3 text-[11px] font-semibold tracking-[0.02em] text-champagne-2 transition-colors hover:text-ink"
         >
           Offres
         </Link>
@@ -94,7 +94,7 @@ export function DesktopNavigation({ groups }: { groups: MegaGroup[] }) {
                 <div className="grid grid-cols-3 gap-x-10 gap-y-1">
                   {active.columns.map((col) => (
                     <div key={col.heading} className="border-t border-stone/50 pt-4">
-                      <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.2em] text-muted">
+                      <p className="mb-3 text-[9px] font-bold tracking-[0.02em] text-muted">
                         {col.heading}
                       </p>
                       <ul className="space-y-0">

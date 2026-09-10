@@ -21,7 +21,7 @@ export default async function BoutiquesPage() {
             <p className="eyebrow mb-6 flex items-center gap-3 text-paper/55"><span className="font-display text-lg italic text-champagne-3">La maison</span> Deux adresses</p>
             <h1 className="font-display text-display-lg">Venez rencontrer <em className="text-champagne-3">vos pharmaciens</em></h1>
             <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-paper/70">Au cœur d&apos;Ezzahra et de Hammam-Lif, nos équipes vous reçoivent pour un conseil personnalisé — analyse de besoin, choix d&apos;actifs, retrait de votre commande en ligne sous deux heures.</p>
-            <ul className="mt-9 flex flex-wrap gap-x-8 gap-y-3 text-[11px] font-bold uppercase tracking-[0.18em] text-paper/60">
+            <ul className="mt-9 flex flex-wrap gap-x-8 gap-y-3 text-[11px] font-bold tracking-[0.02em] text-paper/60">
               <li className="flex items-center gap-2"><TruckIcon size={14} className="text-champagne-3" /> Livraison depuis nos boutiques</li>
               <li className="flex items-center gap-2"><StoreIcon size={14} className="text-champagne-3" /> Retrait 2 h</li>
             </ul>
@@ -73,7 +73,7 @@ export default async function BoutiquesPage() {
         <div className="container-lux grid gap-px bg-stone py-14 sm:grid-cols-2 lg:grid-cols-3 lg:py-20">
           {[
             { i: ChatIcon, t: "Conseil sans rendez-vous", d: "Un doute sur une routine ? Passez nous voir : l'analyse est gratuite et sans engagement." },
-            { i: StoreIcon, t: "Click & collect en 2 h", d: "Commandez sur le site et choisissez « retrait en boutique » : c'est prêt en deux heures." },
+            { i: StoreIcon, t: "Retrait en boutique en 2 h", d: "Commandez sur le site et choisissez « retrait en boutique » : c'est prêt en deux heures." },
             { i: TruckIcon, t: "Livraison depuis le Grand Tunis", d: "Nos boutiques préparent et expédient vos commandes partout en Tunisie, 24–72 h." },
           ].map((x) => (
             <div key={x.t} className="bg-cream px-8 py-10">
